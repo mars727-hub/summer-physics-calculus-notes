@@ -1,0 +1,16 @@
+# Local dependencies and intermediate files
+.codex_deps/
+.codex_work/
+tools/
+
+# Source media and private course materials
+*.mp4
+*.pdf
+*.json
+*.txt
+
+# OS/editor noise
+.DS_Store
+Thumbs.db
+desktop.ini
+

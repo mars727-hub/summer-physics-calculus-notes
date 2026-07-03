@@ -1,0 +1,1062 @@
+<!doctype html>
+<html lang="zh-Hant-TW">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>微積分前 7 頁：函數、指數與對數</title>
+  <script>
+    window.MathJax = {
+      tex: { inlineMath: [["\\(", "\\)"], ["$", "$"]], displayMath: [["\\[", "\\]"]] },
+      svg: { fontCache: "global" }
+    };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+  <style>
+    :root {
+      --ink: #1f2937;
+      --muted: #667085;
+      --paper: #fffaf2;
+      --surface: #ffffff;
+      --line: #d8dee8;
+      --green: #0f766e;
+      --green-soft: #e6f5ef;
+      --indigo: #3730a3;
+      --indigo-soft: #ecebff;
+      --amber: #b45309;
+      --amber-soft: #fff0d2;
+      --rose: #be123c;
+      --ok: #15803d;
+      --shadow: 0 18px 46px rgba(31, 41, 55, 0.12);
+      --radius: 8px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: "Noto Sans TC", "Microsoft JhengHei", "PingFang TC", system-ui, sans-serif;
+      line-height: 1.75;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      border-bottom: 1px solid rgba(31, 41, 55, 0.12);
+      background: rgba(255, 250, 242, 0.94);
+      backdrop-filter: blur(14px);
+    }
+
+    .nav {
+      width: min(1180px, calc(100% - 32px));
+      min-height: 64px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    .mark {
+      width: 36px;
+      height: 36px;
+      display: grid;
+      place-items: center;
+      border-radius: var(--radius);
+      background: var(--ink);
+      color: #fff;
+      font-family: Georgia, serif;
+      font-size: 18px;
+    }
+
+    .links {
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      padding: 8px 0;
+    }
+
+    .links a {
+      display: inline-flex;
+      align-items: center;
+      min-height: 36px;
+      padding: 0 12px;
+      border-radius: 999px;
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 14px;
+      white-space: nowrap;
+    }
+
+    .links a:hover {
+      color: var(--ink);
+      background: var(--surface);
+    }
+
+    .hero {
+      border-bottom: 1px solid var(--line);
+      background:
+        linear-gradient(90deg, rgba(255, 250, 242, 0.97), rgba(255, 250, 242, 0.76)),
+        url("data:image/svg+xml,%3Csvg width='1600' height='900' viewBox='0 0 1600 900' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='1600' height='900' fill='%23f8efe0'/%3E%3Cg stroke='%231f2937' stroke-opacity='.18' fill='none'%3E%3Cpath d='M120 730H1490M210 120V780' stroke-width='4'/%3E%3Cpath d='M250 690C420 620 500 480 610 500C740 525 805 720 950 680C1080 645 1155 420 1340 260' stroke='%230f766e' stroke-width='7'/%3E%3Cpath d='M250 720C430 700 600 650 780 540C960 430 1120 285 1340 145' stroke='%233730a3' stroke-width='6'/%3E%3Cpath d='M250 190C470 245 660 405 810 540C990 700 1140 760 1340 755' stroke='%23b45309' stroke-width='6'/%3E%3C/g%3E%3Cg fill='%231f2937' fill-opacity='.45' font-family='Georgia' font-size='48'%3E%3Ctext x='1010' y='240'%3Ey=a%5Ex%3C/text%3E%3Ctext x='965' y='650'%3Ey=log_a x%3C/text%3E%3Ctext x='470' y='435'%3Ey=f(x)%3C/text%3E%3C/g%3E%3C/svg%3E");
+      background-size: cover;
+      background-position: center;
+    }
+
+    .hero-inner {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+      min-height: 520px;
+      padding: 74px 0;
+      display: grid;
+      align-content: center;
+    }
+
+    .kicker {
+      margin: 0 0 14px;
+      color: var(--green);
+      font-size: 15px;
+      font-weight: 900;
+    }
+
+    h1 {
+      max-width: 860px;
+      margin: 0;
+      font-size: clamp(38px, 7vw, 76px);
+      line-height: 1.05;
+      letter-spacing: 0;
+    }
+
+    .hero p {
+      max-width: 760px;
+      margin: 24px 0 0;
+      color: #344054;
+      font-size: clamp(17px, 2vw, 21px);
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 32px;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 44px;
+      padding: 0 18px;
+      border: 1px solid var(--ink);
+      border-radius: var(--radius);
+      background: var(--ink);
+      color: #fff;
+      text-decoration: none;
+      font: inherit;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .button.secondary {
+      background: var(--surface);
+      color: var(--ink);
+    }
+
+    .band {
+      padding: 72px 0;
+      border-bottom: 1px solid var(--line);
+      background: var(--paper);
+    }
+
+    .band.white { background: var(--surface); }
+
+    .container {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+
+    .section-head {
+      display: grid;
+      grid-template-columns: minmax(0, 0.9fr) minmax(280px, 0.6fr);
+      gap: 32px;
+      align-items: end;
+      margin-bottom: 32px;
+    }
+
+    .section-head h2 {
+      margin: 0;
+      font-size: clamp(28px, 4vw, 44px);
+      line-height: 1.18;
+      letter-spacing: 0;
+    }
+
+    .section-head p {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    h3 {
+      margin: 34px 0 14px;
+      font-size: 24px;
+      line-height: 1.35;
+    }
+
+    h4 {
+      margin: 24px 0 10px;
+      font-size: 18px;
+    }
+
+    p { margin: 12px 0; }
+    ul, ol { padding-left: 1.35rem; }
+    li { margin: 7px 0; }
+
+    .source-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      min-height: 34px;
+      padding: 0 12px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: var(--surface);
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 800;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .note {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--surface);
+      padding: 18px;
+      box-shadow: 0 8px 22px rgba(31, 41, 55, 0.05);
+    }
+
+    .note strong {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 17px;
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+      margin: 18px 0 28px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--surface);
+    }
+
+    table {
+      width: 100%;
+      min-width: 760px;
+      border-collapse: collapse;
+    }
+
+    th, td {
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--line);
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      background: #f3f6fb;
+      color: #344054;
+      font-size: 14px;
+      font-weight: 900;
+    }
+
+    tr:last-child td { border-bottom: 0; }
+
+    .formula-strip {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+      margin: 22px 0;
+    }
+
+    .formula {
+      min-height: 100px;
+      display: grid;
+      align-content: center;
+      border: 1px solid #b7dcd5;
+      border-radius: var(--radius);
+      background: var(--green-soft);
+      padding: 16px;
+      text-align: center;
+      font-weight: 800;
+    }
+
+    .formula:nth-child(2n) {
+      border-color: #cac6ff;
+      background: var(--indigo-soft);
+    }
+
+    .formula:nth-child(3n) {
+      border-color: #f4cf8b;
+      background: var(--amber-soft);
+    }
+
+    .diagram {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+      margin: 22px 0;
+    }
+
+    .visual {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--surface);
+      padding: 18px;
+      overflow: hidden;
+    }
+
+    .visual svg {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .callout {
+      margin: 20px 0;
+      padding: 16px 18px;
+      border-left: 5px solid var(--amber);
+      border-radius: 0 var(--radius) var(--radius) 0;
+      background: var(--amber-soft);
+    }
+
+    .two-col {
+      columns: 2 340px;
+      column-gap: 42px;
+    }
+
+    .quiz-shell {
+      display: grid;
+      grid-template-columns: 300px minmax(0, 1fr);
+      gap: 24px;
+      align-items: start;
+    }
+
+    .quiz-panel {
+      position: sticky;
+      top: 88px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--surface);
+      padding: 18px;
+      box-shadow: var(--shadow);
+    }
+
+    .score-number {
+      margin: 10px 0;
+      font-size: 52px;
+      line-height: 1;
+      font-weight: 900;
+    }
+
+    .progress {
+      height: 12px;
+      margin: 12px 0;
+      overflow: hidden;
+      border-radius: 999px;
+      background: #edf1f7;
+    }
+
+    .progress span {
+      display: block;
+      width: 0%;
+      height: 100%;
+      background: var(--green);
+      transition: width 0.2s ease;
+    }
+
+    .quiz-actions {
+      display: grid;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .quiz-list {
+      display: grid;
+      gap: 14px;
+    }
+
+    .question {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--surface);
+      padding: 18px;
+    }
+
+    .question.correct {
+      border-color: rgba(21, 128, 61, 0.45);
+      background: #f0fdf4;
+    }
+
+    .question.wrong {
+      border-color: rgba(190, 18, 60, 0.45);
+      background: #fff1f2;
+    }
+
+    .question-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 16px;
+      margin-bottom: 12px;
+    }
+
+    .question-title {
+      margin: 0;
+      font-size: 17px;
+      font-weight: 900;
+    }
+
+    .tag {
+      flex: 0 0 auto;
+      border-radius: 999px;
+      padding: 3px 10px;
+      background: #f3f6fb;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 900;
+    }
+
+    .choices {
+      display: grid;
+      gap: 8px;
+    }
+
+    .choice {
+      display: grid;
+      grid-template-columns: 24px minmax(0, 1fr);
+      gap: 10px;
+      align-items: start;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 10px 12px;
+      background: #fff;
+      cursor: pointer;
+    }
+
+    .choice:hover { border-color: var(--indigo); }
+
+    .choice input {
+      margin-top: 6px;
+      accent-color: var(--green);
+    }
+
+    .feedback {
+      display: none;
+      margin-top: 14px;
+      padding-top: 12px;
+      border-top: 1px solid rgba(31, 41, 55, 0.12);
+      color: #344054;
+    }
+
+    .feedback.show { display: block; }
+    .result-ok { color: var(--ok); font-weight: 900; }
+    .result-bad { color: var(--rose); font-weight: 900; }
+
+    .footer {
+      padding: 28px 0;
+      background: var(--ink);
+      color: rgba(255, 255, 255, 0.72);
+      font-size: 14px;
+    }
+
+    @media (max-width: 900px) {
+      .nav { flex-direction: column; align-items: flex-start; padding: 10px 0; }
+      .section-head, .quiz-shell, .diagram { grid-template-columns: 1fr; }
+      .grid, .formula-strip { grid-template-columns: 1fr; }
+      .quiz-panel { position: static; }
+      .hero-inner { min-height: 470px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <nav class="nav" aria-label="主導覽">
+      <div class="brand"><span class="mark">f</span><span>微積分函數筆記</span></div>
+      <div class="links">
+        <a href="#source">來源</a>
+        <a href="#function">函數</a>
+        <a href="#operations">運算</a>
+        <a href="#exponential">指數</a>
+        <a href="#logarithm">對數</a>
+        <a href="#quiz">互動測驗</a>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="hero-inner">
+        <p class="kicker">微積分1.pdf 第 1 到第 7 頁</p>
+        <h1>函數、指數函數與對數函數</h1>
+        <p>把手寫講義中的函數定義、四則運算、奇偶性、合成函數、自然指數與對數法則整理成可閱讀、可練習的互動網頁。</p>
+        <div class="actions">
+          <a class="button" href="#quiz">開始測驗</a>
+          <a class="button secondary" href="#function">從函數開始</a>
+        </div>
+      </div>
+    </section>
+
+    <section id="source" class="band white">
+      <div class="container">
+        <div class="section-head">
+          <h2>整理範圍</h2>
+          <p>本頁只整理 `微積分1.pdf` 第 1 到第 7 頁。因 PDF 文字抽取破碎，內容以頁面渲染圖的視覺判讀為準。</p>
+        </div>
+        <div class="source-row">
+          <span class="pill">第 1 頁：函數定義與圖形</span>
+          <span class="pill">第 2 頁：函數運算、奇偶、合成</span>
+          <span class="pill">第 3 頁：指數函數與指數律</span>
+          <span class="pill">第 4 頁：複利與自然指數</span>
+          <span class="pill">第 5 頁：對數函數與反函數</span>
+          <span class="pill">第 6 頁：對數運算法則</span>
+          <span class="pill">第 7 頁：對數例題</span>
+        </div>
+      </div>
+    </section>
+
+    <section id="function" class="band">
+      <div class="container">
+        <div class="section-head">
+          <h2>一、函數定義</h2>
+          <p>函數是一個輸入到輸出的規則。最核心的一句話：定義域中的每一個輸入，只能對應到一個輸出。</p>
+        </div>
+
+        <div class="grid">
+          <div class="note"><strong>輸入與輸出</strong>通常以 \(x\) 表示輸入，稱為自變數；以 \(y=f(x)\) 表示輸出，稱為應變數。</div>
+          <div class="note"><strong>定義域</strong>所有允許輸入的 \(x\) 所成的集合，常記為 domain。</div>
+          <div class="note"><strong>值域</strong>所有可能輸出的 \(y\) 所成的集合，常記為 range。</div>
+        </div>
+
+        <h3>函數的判定</h3>
+        <p>
+          若 \(f:A\to B\)，表示集合 \(A\) 中每一個元素，在集合 \(B\) 中都有唯一對應。
+          可以是一對一或多對一；不能是一對無、也不能是一對多。
+        </p>
+
+        <div class="diagram">
+          <div class="visual" aria-label="一對一與多對一示意圖">
+            <svg viewBox="0 0 520 270" role="img">
+              <rect width="520" height="270" fill="#ffffff" />
+              <text x="70" y="34" font-size="22" font-weight="700" fill="#1f2937">函數對應</text>
+              <ellipse cx="120" cy="150" rx="58" ry="86" fill="#e6f5ef" stroke="#0f766e" stroke-width="3" />
+              <ellipse cx="390" cy="150" rx="58" ry="86" fill="#ecebff" stroke="#3730a3" stroke-width="3" />
+              <text x="114" y="80" font-size="20">A</text>
+              <text x="384" y="80" font-size="20">B</text>
+              <text x="114" y="125" font-size="20">a</text>
+              <text x="114" y="155" font-size="20">b</text>
+              <text x="114" y="185" font-size="20">c</text>
+              <text x="384" y="130" font-size="20">α</text>
+              <text x="384" y="172" font-size="20">β</text>
+              <path d="M150 120 C220 95 300 95 360 122" fill="none" stroke="#1f2937" stroke-width="3" marker-end="url(#arrow)" />
+              <path d="M150 150 C225 140 300 138 360 128" fill="none" stroke="#1f2937" stroke-width="3" marker-end="url(#arrow)" />
+              <path d="M150 180 C225 195 300 190 360 172" fill="none" stroke="#1f2937" stroke-width="3" marker-end="url(#arrow)" />
+              <defs>
+                <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
+                  <path d="M0,0 L0,6 L9,3 z" fill="#1f2937" />
+                </marker>
+              </defs>
+            </svg>
+          </div>
+          <div class="visual" aria-label="垂直線判別法示意圖">
+            <svg viewBox="0 0 520 270" role="img">
+              <rect width="520" height="270" fill="#ffffff" />
+              <text x="46" y="34" font-size="22" font-weight="700" fill="#1f2937">垂直線判別法</text>
+              <path d="M65 210H230M115 40V230" stroke="#1f2937" stroke-width="3" />
+              <path d="M75 165 C105 55 160 70 205 195" fill="none" stroke="#0f766e" stroke-width="5" />
+              <path d="M170 48V220" stroke="#3730a3" stroke-width="4" />
+              <text x="70" y="244" font-size="18">每條垂直線最多交一次</text>
+              <path d="M305 210H470M360 40V230" stroke="#1f2937" stroke-width="3" />
+              <path d="M415 70 C318 80 315 185 415 195 C470 160 470 105 415 70" fill="none" stroke="#b45309" stroke-width="5" />
+              <path d="M410 48V220" stroke="#3730a3" stroke-width="4" />
+              <circle cx="410" cy="82" r="6" fill="#3730a3" />
+              <circle cx="410" cy="191" r="6" fill="#3730a3" />
+              <text x="303" y="244" font-size="18">同一個 \(x\) 對到兩個 \(y\)</text>
+            </svg>
+          </div>
+        </div>
+
+        <div class="callout">
+          <strong>垂直線判別法：</strong>
+          若任一垂直線與圖形最多交於一點，該圖形可表示某個函數 \(y=f(x)\)；若有垂直線交到兩點以上，代表同一個 \(x\) 對到多個 \(y\)，不是函數圖形。
+        </div>
+      </div>
+    </section>
+
+    <section id="operations" class="band white">
+      <div class="container">
+        <div class="section-head">
+          <h2>二、函數運算、奇偶性與合成函數</h2>
+          <p>第 2 頁把函數視為可以做運算的物件：兩個函數可以相加、相減、相乘、相除，也可以前後接起來做合成。</p>
+        </div>
+
+        <h3>函數四則運算</h3>
+        <div class="formula-strip">
+          <div class="formula">\((f+g)(x)=f(x)+g(x)\)</div>
+          <div class="formula">\((f-g)(x)=f(x)-g(x)\)</div>
+          <div class="formula">\((fg)(x)=f(x)g(x)\)</div>
+          <div class="formula">\(\left(\frac{f}{g}\right)(x)=\frac{f(x)}{g(x)},\ g(x)\neq 0\)</div>
+        </div>
+
+        <h3>奇函數與偶函數</h3>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>類型</th><th>判斷式</th><th>圖形對稱</th><th>例子</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>偶函數</td><td>\(f(-x)=f(x)\)</td><td>對稱於 \(y\) 軸</td><td>\(x^2,\ x^4,\ \cos x\)</td></tr>
+              <tr><td>奇函數</td><td>\(f(-x)=-f(x)\)</td><td>對稱於原點</td><td>\(x,\ x^3,\ \sin x\)</td></tr>
+              <tr><td>非奇非偶</td><td>兩條件都不滿足</td><td>通常無上述對稱</td><td>\(x^2+x\)</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h4>奇偶性的運算直覺</h4>
+        <ul class="two-col">
+          <li>奇函數乘奇函數會得到偶函數。</li>
+          <li>偶函數乘偶函數會得到偶函數。</li>
+          <li>奇函數乘偶函數會得到奇函數。</li>
+          <li>同加減不一定保留奇偶性，需回到定義檢查。</li>
+        </ul>
+
+        <h3>合成函數</h3>
+        <p>
+          合成函數表示先做一個函數，再把結果丟進另一個函數：
+          \[
+          (f\circ g)(x)=f(g(x))
+          \]
+          若令 \(u=g(x)\)，則 \((f\circ g)(x)=f(u)\)。
+        </p>
+        <div class="callout">
+          <strong>重要提醒：</strong>
+          合成函數通常不滿足交換律，也就是
+          \[
+          (f\circ g)(x)\neq (g\circ f)(x)
+          \]
+          除非題目中特別剛好相等。
+        </div>
+
+        <h4>講義同型例子</h4>
+        <p>
+          若 \(f(x)=x^2+1\)、\(g(x)=2x+3\)、\(h(x)=-x-2\)，則
+          \[
+          (f\circ g)(x)=f(2x+3)=(2x+3)^2+1
+          \]
+          \[
+          (g\circ f)(x)=g(x^2+1)=2(x^2+1)+3=2x^2+5
+          \]
+          兩者明顯不同。
+        </p>
+      </div>
+    </section>
+
+    <section id="exponential" class="band">
+      <div class="container">
+        <div class="section-head">
+          <h2>三、指數函數與自然指數</h2>
+          <p>指數函數描述「以固定比例成長或衰退」的現象。第 3、4 頁從一般 \(a^x\) 走到自然底數 \(e\)。</p>
+        </div>
+
+        <h3>指數函數定義</h3>
+        <p>
+          \[
+          f(x)=a^x,\qquad a>0,\ a\neq 1,\ x\in\mathbb{R}
+          \]
+          稱為以常數 \(a\) 為底的指數函數。
+        </p>
+
+        <div class="grid">
+          <div class="note"><strong>\(a>1\)</strong>圖形遞增，代表成長。例如 \(2^x,3^x\)。</div>
+          <div class="note"><strong> \(0<a<1\)</strong>圖形遞減，代表衰退。例如 \((\frac12)^x,(\frac13)^x\)。</div>
+          <div class="note"><strong>共同特徵</strong>所有 \(a^x\) 皆通過 \((0,1)\)，且輸出永遠為正。</div>
+        </div>
+
+        <h3>指數律</h3>
+        <div class="formula-strip">
+          <div class="formula">\(a^r a^s=a^{r+s}\)</div>
+          <div class="formula">\((a^r)^s=a^{rs}\)</div>
+          <div class="formula">\((ab)^r=a^r b^r\)</div>
+          <div class="formula">\(\frac{a^r}{a^s}=a^{r-s}\)</div>
+        </div>
+        <div class="formula-strip">
+          <div class="formula">\(\left(\frac{a}{b}\right)^r=\frac{a^r}{b^r}\)</div>
+          <div class="formula">\(a^0=1\)</div>
+          <div class="formula">\(a^{-n}=\frac{1}{a^n}\)</div>
+          <div class="formula">\(a^{1/n}=\sqrt[n]{a}\)</div>
+        </div>
+
+        <h3>複利與自然底數 \(e\)</h3>
+        <p>
+          若本金為 \(A\)，年利率 \(100\%\)，一年計算一次複利：
+          \[
+          A(1+100\%)=2A
+          \]
+          若每半年計息一次：
+          \[
+          A\left(1+\frac{100\%}{2}\right)^2=2.25A
+          \]
+          若每個月計息一次：
+          \[
+          A\left(1+\frac{100\%}{12}\right)^{12}\approx 2.61A
+          \]
+        </p>
+        <p>
+          當一年內計息次數 \(n\to\infty\)，會逼近自然底數：
+          \[
+          e=\lim_{n\to\infty}\left(1+\frac{1}{n}\right)^n
+          \]
+          自然指數函數則為：
+          \[
+          e^x=\lim_{n\to\infty}\left(1+\frac{x}{n}\right)^n
+          =\lim_{h\to 0}(1+h)^{x/h}
+          \]
+        </p>
+      </div>
+    </section>
+
+    <section id="logarithm" class="band white">
+      <div class="container">
+        <div class="section-head">
+          <h2>四、對數函數</h2>
+          <p>對數是指數的反函數。指數問「底數的幾次方等於某數？」對數則回答「那個次方是多少？」</p>
+        </div>
+
+        <h3>對數定義與反函數關係</h3>
+        <p>
+          \[
+          f(x)=\log_a x,\qquad a>0,\ a\neq 1,\ x>0
+          \]
+          並且：
+          \[
+          a^x=y \Longleftrightarrow \log_a y=x
+          \]
+          例如：
+          \[
+          2^3=8 \Longleftrightarrow \log_2 8=3
+          \]
+        </p>
+
+        <div class="grid">
+          <div class="note"><strong>常用對數</strong>\(\log x=\log_{10}x\)。</div>
+          <div class="note"><strong>自然對數</strong>\(\ln x=\log_e x\)。</div>
+          <div class="note"><strong>圖形關係</strong>\(y=a^x\) 與 \(y=\log_a x\) 對稱於直線 \(y=x\)。</div>
+        </div>
+
+        <h3>對數圖形</h3>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>底數條件</th><th>圖形方向</th><th>通過點</th><th>定義域與值域</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>\(a>1\)</td><td>遞增</td><td>\((1,0)\)</td><td>定義域 \(x>0\)，值域全體實數</td></tr>
+              <tr><td>\(0<a<1\)</td><td>遞減</td><td>\((1,0)\)</td><td>定義域 \(x>0\)，值域全體實數</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>對數運算法則</h3>
+        <div class="formula-strip">
+          <div class="formula">\(\log_a(rs)=\log_a r+\log_a s\)</div>
+          <div class="formula">\(\log_a\left(\frac{r}{s}\right)=\log_a r-\log_a s\)</div>
+          <div class="formula">\(\log_a(r^n)=n\log_a r\)</div>
+          <div class="formula">\(\log_r s=\frac{\log_a s}{\log_a r}\)</div>
+        </div>
+        <div class="formula-strip">
+          <div class="formula">\(\log_a b=\frac{1}{\log_b a}\)</div>
+          <div class="formula">\(\log_a 1=0\)</div>
+          <div class="formula">\(\log_a a=1\)</div>
+          <div class="formula">\(a^{\log_a x}=x\)</div>
+        </div>
+
+        <h3>第 7 頁同型例題</h3>
+        <ol>
+          <li>
+            \[
+            5^{\log_5 3}=3
+            \]
+            因為 \(a^{\log_a x}=x\)。
+          </li>
+          <li>
+            \[
+            \log(5\times 10^{11})-\log 5
+            =\log\left(\frac{5\times 10^{11}}{5}\right)
+            =\log(10^{11})=11
+            \]
+          </li>
+          <li>
+            \[
+            \log_2 5\cdot \log_5 2
+            =\log_2 5\cdot \frac{1}{\log_2 5}=1
+            \]
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <section id="quiz" class="band">
+      <div class="container">
+        <div class="section-head">
+          <h2>互動式階段複習測驗</h2>
+          <p>共 15 題，含 10 題觀念選擇與 5 題計算應用。交卷後會顯示分數、正解與詳解。</p>
+        </div>
+
+        <div class="quiz-shell">
+          <aside class="quiz-panel" aria-label="測驗狀態">
+            <div class="tag">目前進度</div>
+            <div class="score-number"><span id="answeredCount">0</span>/15</div>
+            <div class="progress" aria-hidden="true"><span id="progressBar"></span></div>
+            <p id="scoreText">尚未交卷。</p>
+            <div class="quiz-actions">
+              <button class="button" type="button" id="submitQuiz">交卷並看詳解</button>
+              <button class="button secondary" type="button" id="resetQuiz">重作測驗</button>
+            </div>
+          </aside>
+          <div class="quiz-list" id="quizList"></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      本頁整理自 `微積分1.pdf` 第 1 至第 7 頁。公式以 MathJax 呈現，互動測驗由本機 JavaScript 執行。
+    </div>
+  </footer>
+
+  <script>
+    const questions = [
+      {
+        type: "觀念",
+        title: "哪一句最符合函數的定義？",
+        choices: ["每個輸入可以對應很多輸出", "定義域中的每個輸入只能對應一個輸出", "每個輸出只能來自一個輸入", "圖形只要畫得出來都是函數"],
+        answer: 1,
+        explanation: "函數的核心是定義域中的每個 \\(x\\) 都只能得到唯一的 \\(y\\)。多個 \\(x\\) 可以得到同一個 \\(y\\)，但同一個 \\(x\\) 不能對到多個 \\(y\\)。"
+      },
+      {
+        type: "觀念",
+        title: "垂直線判別法用來判斷什麼？",
+        choices: ["圖形是否為直線", "圖形是否對稱於原點", "圖形是否可表示為 \\(y=f(x)\\)", "函數是否為奇函數"],
+        answer: 2,
+        explanation: "若任一垂直線與圖形最多交於一點，代表每個 \\(x\\) 最多只有一個 \\(y\\)，因此可表示為函數圖形。"
+      },
+      {
+        type: "觀念",
+        title: "函數 \\(\\left(\\frac{f}{g}\\right)(x)\\) 的定義需要額外注意哪件事？",
+        choices: ["\\(f(x)\\neq 0\\)", "\\(g(x)\\neq 0\\)", "\\(x\\neq 0\\)", "\\(f(x)=g(x)\\)"],
+        answer: 1,
+        explanation: "\\(\\left(\\frac{f}{g}\\right)(x)=\\frac{f(x)}{g(x)}\\)，分母不能為 0，所以必須排除 \\(g(x)=0\\) 的輸入。"
+      },
+      {
+        type: "觀念",
+        title: "若 \\(f(-x)=f(x)\\)，則 \\(f\\) 是：",
+        choices: ["奇函數", "偶函數", "指數函數", "反函數"],
+        answer: 1,
+        explanation: "偶函數定義為 \\(f(-x)=f(x)\\)，圖形對稱於 \\(y\\) 軸。"
+      },
+      {
+        type: "觀念",
+        title: "若 \\(f(-x)=-f(x)\\)，其圖形具備哪種對稱？",
+        choices: ["對稱於 \\(y\\) 軸", "對稱於 \\(x\\) 軸", "對稱於原點", "對稱於直線 \\(x=1\\)"],
+        answer: 2,
+        explanation: "奇函數的圖形對稱於原點，例如 \\(y=x\\) 與 \\(y=x^3\\)。"
+      },
+      {
+        type: "觀念",
+        title: "合成函數 \\((f\\circ g)(x)\\) 的意思是：",
+        choices: ["\\(f(x)+g(x)\\)", "\\(f(x)g(x)\\)", "\\(f(g(x))\\)", "\\(g(f(x))\\)"],
+        answer: 2,
+        explanation: "\\((f\\circ g)(x)=f(g(x))\\)，也就是先做 \\(g\\)，再把結果丟進 \\(f\\)。"
+      },
+      {
+        type: "觀念",
+        title: "下列哪一句關於合成函數最正確？",
+        choices: ["合成函數一定滿足交換律", "\\((f\\circ g)(x)\\) 通常等於 \\((g\\circ f)(x)\\)", "合成函數通常不滿足交換律", "合成函數只能用在線性函數"],
+        answer: 2,
+        explanation: "講義中特別強調合成函數不滿足交換律；通常 \\(f(g(x))\\neq g(f(x))\\)。"
+      },
+      {
+        type: "觀念",
+        title: "指數函數 \\(f(x)=a^x\\) 的底數條件為：",
+        choices: ["\\(a>0, a\\neq 1\\)", "\\(a<0\\)", "\\(a=1\\)", "\\(a\\) 可以是任何實數"],
+        answer: 0,
+        explanation: "實數範圍的指數函數通常要求 \\(a>0\\) 且 \\(a\\neq 1\\)。若 \\(a=1\\)，函數會退化為常數 1。"
+      },
+      {
+        type: "觀念",
+        title: "\\(y=a^x\\) 與 \\(y=\\log_a x\\) 的圖形關係是：",
+        choices: ["對稱於 \\(x\\) 軸", "對稱於 \\(y\\) 軸", "對稱於直線 \\(y=x\\)", "完全相同"],
+        answer: 2,
+        explanation: "指數函數與同底數對數函數互為反函數，因此圖形對稱於直線 \\(y=x\\)。"
+      },
+      {
+        type: "觀念",
+        title: "自然底數 \\(e\\) 可由哪個極限定義？",
+        choices: ["\\(\\lim_{n\\to\\infty}(1+n)^n\\)", "\\(\\lim_{n\\to\\infty}(1+\\frac{1}{n})^n\\)", "\\(\\lim_{n\\to 0}(1+n)^n\\)", "\\(\\lim_{n\\to\\infty}\\frac{1}{n}\\)"],
+        answer: 1,
+        explanation: "自然底數 \\(e\\) 的經典定義為 \\(e=\\lim_{n\\to\\infty}(1+\\frac{1}{n})^n\\)。"
+      },
+      {
+        type: "計算",
+        title: "若 \\(f(x)=x^2+1\\)、\\(g(x)=2x+3\\)，求 \\((f\\circ g)(x)\\)。",
+        choices: ["\\(2x^2+5\\)", "\\((2x+3)^2+1\\)", "\\(2x^2+3\\)", "\\(x^2+2x+4\\)"],
+        answer: 1,
+        explanation: "\\((f\\circ g)(x)=f(g(x))\\)。把 \\(g(x)=2x+3\\) 代入 \\(f\\) 的輸入位置，得到 \\((2x+3)^2+1\\)。"
+      },
+      {
+        type: "計算",
+        title: "化簡 \\(2^3\\cdot 2^5\\)。",
+        choices: ["\\(2^8\\)", "\\(2^{15}\\)", "\\(4^8\\)", "\\(2^2\\)"],
+        answer: 0,
+        explanation: "同底數相乘，指數相加：\\(2^3\\cdot 2^5=2^{3+5}=2^8\\)。"
+      },
+      {
+        type: "計算",
+        title: "計算 \\(5^{\\log_5 3}\\)。",
+        choices: ["\\(1\\)", "\\(3\\)", "\\(5\\)", "\\(\\log_5 15\\)"],
+        answer: 1,
+        explanation: "利用反函數關係 \\(a^{\\log_a x}=x\\)，所以 \\(5^{\\log_5 3}=3\\)。"
+      },
+      {
+        type: "計算",
+        title: "化簡 \\(\\log(5\\times 10^{11})-\\log 5\\)。",
+        choices: ["\\(5\\)", "\\(10\\)", "\\(11\\)", "\\(16\\)"],
+        answer: 2,
+        explanation: "\\(\\log(5\\times10^{11})-\\log5=\\log\\left(\\frac{5\\times10^{11}}{5}\\right)=\\log(10^{11})=11\\)。"
+      },
+      {
+        type: "計算",
+        title: "計算 \\(\\log_2 5\\cdot \\log_5 2\\)。",
+        choices: ["\\(0\\)", "\\(1\\)", "\\(2\\)", "\\(10\\)"],
+        answer: 1,
+        explanation: "由 \\(\\log_a b=\\frac{1}{\\log_b a}\\)，可得 \\(\\log_5 2=\\frac{1}{\\log_2 5}\\)，所以乘積為 1。"
+      }
+    ];
+
+    const quizList = document.getElementById("quizList");
+    const answeredCount = document.getElementById("answeredCount");
+    const progressBar = document.getElementById("progressBar");
+    const scoreText = document.getElementById("scoreText");
+    const submitQuiz = document.getElementById("submitQuiz");
+    const resetQuiz = document.getElementById("resetQuiz");
+
+    function renderQuiz() {
+      quizList.innerHTML = questions.map((q, index) => {
+        const choices = q.choices.map((choice, choiceIndex) => `
+          <label class="choice">
+            <input type="radio" name="q${index}" value="${choiceIndex}" />
+            <span>${String.fromCharCode(65 + choiceIndex)}. ${choice}</span>
+          </label>
+        `).join("");
+
+        return `
+          <article class="question" id="question-${index}">
+            <div class="question-head">
+              <p class="question-title">${index + 1}. ${q.title}</p>
+              <span class="tag">${q.type}</span>
+            </div>
+            <div class="choices">${choices}</div>
+            <div class="feedback" id="feedback-${index}"></div>
+          </article>
+        `;
+      }).join("");
+
+      quizList.querySelectorAll("input[type='radio']").forEach(input => {
+        input.addEventListener("change", updateProgress);
+      });
+
+      updateProgress();
+      if (window.MathJax) MathJax.typesetPromise();
+    }
+
+    function updateProgress() {
+      let answered = 0;
+      questions.forEach((_, index) => {
+        if (document.querySelector(`input[name="q${index}"]:checked`)) answered += 1;
+      });
+      answeredCount.textContent = answered;
+      progressBar.style.width = `${answered / questions.length * 100}%`;
+      if (answered < questions.length) {
+        scoreText.textContent = `已完成 ${answered} 題，尚有 ${questions.length - answered} 題。`;
+      }
+    }
+
+    function gradeQuiz() {
+      let score = 0;
+
+      questions.forEach((q, index) => {
+        const selected = document.querySelector(`input[name="q${index}"]:checked`);
+        const selectedIndex = selected ? Number(selected.value) : -1;
+        const isCorrect = selectedIndex === q.answer;
+        const questionEl = document.getElementById(`question-${index}`);
+        const feedbackEl = document.getElementById(`feedback-${index}`);
+
+        if (isCorrect) score += 1;
+        questionEl.classList.remove("correct", "wrong");
+        questionEl.classList.add(isCorrect ? "correct" : "wrong");
+
+        const selectedText = selectedIndex >= 0 ? `${String.fromCharCode(65 + selectedIndex)}. ${q.choices[selectedIndex]}` : "未作答";
+        const answerText = `${String.fromCharCode(65 + q.answer)}. ${q.choices[q.answer]}`;
+
+        feedbackEl.innerHTML = `
+          <div class="${isCorrect ? "result-ok" : "result-bad"}">${isCorrect ? "答對" : "需訂正"}</div>
+          <div><strong>你的答案：</strong>${selectedText}</div>
+          <div><strong>正確答案：</strong>${answerText}</div>
+          <div><strong>詳解：</strong>${q.explanation}</div>
+        `;
+        feedbackEl.classList.add("show");
+      });
+
+      answeredCount.textContent = questions.length;
+      progressBar.style.width = "100%";
+      scoreText.textContent = `得分 ${score}/${questions.length}，正確率 ${Math.round(score / questions.length * 100)}%。`;
+      if (window.MathJax) MathJax.typesetPromise();
+    }
+
+    function resetAll() {
+      document.querySelectorAll("input[type='radio']").forEach(input => { input.checked = false; });
+      document.querySelectorAll(".question").forEach(el => el.classList.remove("correct", "wrong"));
+      document.querySelectorAll(".feedback").forEach(el => {
+        el.classList.remove("show");
+        el.innerHTML = "";
+      });
+      scoreText.textContent = "尚未交卷。";
+      updateProgress();
+      document.getElementById("quiz").scrollIntoView({ behavior: "smooth" });
+    }
+
+    submitQuiz.addEventListener("click", gradeQuiz);
+    resetQuiz.addEventListener("click", resetAll);
+    renderQuiz();
+  </script>
+</body>
+</html>

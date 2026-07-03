@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="zh-Hant-TW">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>暑修物理與微積分互動筆記</title>
+  <style>
+    :root {
+      --ink: #1f2937;
+      --muted: #667085;
+      --paper: #fffaf2;
+      --surface: #ffffff;
+      --line: #d8dee8;
+      --teal: #0f766e;
+      --teal-soft: #e7f6f3;
+      --amber: #b45309;
+      --amber-soft: #fff0d2;
+      --indigo: #3730a3;
+      --indigo-soft: #ecebff;
+      --shadow: 0 18px 46px rgba(31, 41, 55, 0.12);
+      --radius: 8px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: var(--paper);
+      font-family: "Noto Sans TC", "Microsoft JhengHei", "PingFang TC", system-ui, sans-serif;
+      line-height: 1.75;
+    }
+
+    .hero {
+      min-height: 100vh;
+      display: grid;
+      align-items: center;
+      padding: 64px 0;
+      background:
+        linear-gradient(90deg, rgba(255, 250, 242, 0.97), rgba(255, 250, 242, 0.78)),
+        url("data:image/svg+xml,%3Csvg width='1600' height='900' viewBox='0 0 1600 900' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='1600' height='900' fill='%23f8efe0'/%3E%3Cg stroke='%231f2937' stroke-opacity='.16' fill='none'%3E%3Cpath d='M150 720H1480M230 110V770' stroke-width='4'/%3E%3Cpath d='M270 675C430 580 515 470 635 505C770 545 805 725 960 665C1110 610 1180 360 1370 220' stroke='%230f766e' stroke-width='7'/%3E%3Cpath d='M270 705C470 680 650 610 835 485C1015 365 1160 250 1370 150' stroke='%233730a3' stroke-width='6'/%3E%3Cpath d='M270 210C500 265 670 420 825 540C1005 680 1160 745 1370 750' stroke='%23b45309' stroke-width='6'/%3E%3C/g%3E%3C/svg%3E");
+      background-size: cover;
+      background-position: center;
+    }
+
+    .container {
+      width: min(1120px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+
+    .kicker {
+      margin: 0 0 14px;
+      color: var(--teal);
+      font-size: 15px;
+      font-weight: 900;
+    }
+
+    h1 {
+      max-width: 880px;
+      margin: 0;
+      font-size: clamp(38px, 7vw, 76px);
+      line-height: 1.05;
+      letter-spacing: 0;
+    }
+
+    .lead {
+      max-width: 780px;
+      margin: 24px 0 0;
+      color: #344054;
+      font-size: clamp(17px, 2vw, 21px);
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+      margin-top: 42px;
+    }
+
+    .card {
+      display: grid;
+      min-height: 280px;
+      align-content: space-between;
+      gap: 26px;
+      padding: 26px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--surface);
+      box-shadow: var(--shadow);
+      text-decoration: none;
+      color: inherit;
+      transition: transform 0.18s ease, box-shadow 0.18s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 22px 54px rgba(31, 41, 55, 0.16);
+    }
+
+    .card.physics { border-top: 7px solid var(--teal); }
+    .card.calculus { border-top: 7px solid var(--indigo); }
+
+    .eyebrow {
+      display: inline-flex;
+      width: fit-content;
+      min-height: 34px;
+      align-items: center;
+      padding: 0 12px;
+      border-radius: 999px;
+      background: var(--teal-soft);
+      color: var(--teal);
+      font-weight: 900;
+      font-size: 14px;
+    }
+
+    .calculus .eyebrow {
+      background: var(--indigo-soft);
+      color: var(--indigo);
+    }
+
+    h2 {
+      margin: 18px 0 8px;
+      font-size: clamp(26px, 3vw, 36px);
+      line-height: 1.15;
+      letter-spacing: 0;
+    }
+
+    .card p {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .open {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: fit-content;
+      min-height: 44px;
+      padding: 0 18px;
+      border-radius: var(--radius);
+      background: var(--ink);
+      color: #fff;
+      font-weight: 900;
+    }
+
+    .notice {
+      margin-top: 28px;
+      padding: 16px 18px;
+      border-left: 5px solid var(--amber);
+      border-radius: 0 var(--radius) var(--radius) 0;
+      background: var(--amber-soft);
+      color: #53320a;
+    }
+
+    @media (max-width: 800px) {
+      .cards { grid-template-columns: 1fr; }
+      .hero { align-items: start; }
+    }
+  </style>
+</head>
+<body>
+  <main class="hero">
+    <div class="container">
+      <p class="kicker">114 學程暑修互動筆記</p>
+      <h1>普通物理與微積分學習入口</h1>
+      <p class="lead">
+        這裡收錄兩份可互動複習的靜態網頁：一份整理普通物理的測量與一維運動，另一份整理微積分前 7 頁的函數、指數與對數。
+      </p>
+
+      <section class="cards" aria-label="課程入口">
+        <a class="card physics" href="physics_kinematics_study.html">
+          <div>
+            <span class="eyebrow">普通物理</span>
+            <h2>測量、一維運動與微積分應用</h2>
+            <p>包含 SI 單位、量綱分析、速度與加速度、等加速度運動、自由落體、圖形斜率與面積意義，以及互動測驗。</p>
+          </div>
+          <span class="open">開啟普物筆記</span>
+        </a>
+
+        <a class="card calculus" href="calculus_functions_study.html">
+          <div>
+            <span class="eyebrow">微積分</span>
+            <h2>函數、指數函數與對數函數</h2>
+            <p>涵蓋函數定義、函數運算、奇偶性、合成函數、自然指數、對數函數與對數運算法則，以及互動測驗。</p>
+          </div>
+          <span class="open">開啟微積分筆記</span>
+        </a>
+      </section>
+
+      <div class="notice">
+        本網站只包含靜態 HTML、CSS 與 JavaScript，不包含原始影片、PDF、逐字稿或任何本機路徑資料。
+      </div>
+    </div>
+  </main>
+</body>
+</html>
