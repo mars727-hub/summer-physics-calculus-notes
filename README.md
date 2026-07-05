@@ -1,6 +1,6 @@
 # 暑修物理與微積分互動筆記
 
-這是一個為暑修課程整理的靜態互動學習網站，內容包含普通物理與微積分的重點筆記、公式整理與階段複習測驗。
+這是一個為暑修課程整理的靜態互動學習網站，內容包含普通物理與微積分的重點筆記、公式整理、老師強調處標註與階段複習測驗。
 
 網站連結：
 
@@ -39,6 +39,24 @@ https://mars727-hub.github.io/summer-physics-calculus-notes/calculus_functions_s
 - 合成函數
 - 指數函數與自然底數 `e`
 - 對數函數與對數運算法則
+- 互動式階段複習測驗
+
+### 微積分第 2 堂：三角函數與極限
+
+頁面：
+
+https://mars727-hub.github.io/summer-physics-calculus-notes/calculus_trig_limits_study.html
+
+主題包含：
+
+- 角度與弧度換算
+- 六大三角函數與單位圓定義
+- 特殊角表與三角恆等式
+- 三角函數圖形、週期與垂直漸近線
+- 和差角公式、倍角公式與半角公式
+- 左極限、右極限與二側極限存在條件
+- 講義星號與錄音中老師強調處
+- 逐條驗證與待查證/相斥提醒
 - 互動式階段複習測驗
 
 ## 使用方式
@@ -96,6 +114,7 @@ https://mars727-hub.github.io/summer-physics-calculus-notes/calculus_functions_s
 ├── index.html
 ├── physics_kinematics_study.html
 ├── calculus_functions_study.html
+├── calculus_trig_limits_study.html
 ├── .gitignore
 └── README.md
 ```

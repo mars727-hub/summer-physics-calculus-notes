@@ -72,7 +72,7 @@
 
     .cards {
       display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 18px;
       margin-top: 42px;
     }
@@ -99,6 +99,7 @@
 
     .card.physics { border-top: 7px solid var(--teal); }
     .card.calculus { border-top: 7px solid var(--indigo); }
+    .card.limits { border-top: 7px solid var(--amber); }
 
     .eyebrow {
       display: inline-flex;
@@ -116,6 +117,11 @@
     .calculus .eyebrow {
       background: var(--indigo-soft);
       color: var(--indigo);
+    }
+
+    .limits .eyebrow {
+      background: var(--amber-soft);
+      color: var(--amber);
     }
 
     h2 {
@@ -164,7 +170,7 @@
       <p class="kicker">114 學程暑修互動筆記</p>
       <h1>普通物理與微積分學習入口</h1>
       <p class="lead">
-        這裡收錄兩份可互動複習的靜態網頁：一份整理普通物理的測量與一維運動，另一份整理微積分前 7 頁的函數、指數與對數。
+        這裡收錄三份可互動複習的靜態網頁：普通物理的測量與一維運動、微積分前 7 頁的函數指數對數，以及微積分第 2 堂的三角函數與極限。
       </p>
 
       <section class="cards" aria-label="課程入口">
@@ -184,6 +190,15 @@
             <p>涵蓋函數定義、函數運算、奇偶性、合成函數、自然指數、對數函數與對數運算法則，以及互動測驗。</p>
           </div>
           <span class="open">開啟微積分筆記</span>
+        </a>
+
+        <a class="card limits" href="calculus_trig_limits_study.html">
+          <div>
+            <span class="eyebrow">微積分第 2 堂</span>
+            <h2>三角函數、圖形週期與極限</h2>
+            <p>涵蓋弧度制、六大三角函數、特殊角、恆等式、圖形與週期、和差角與半角公式、左右極限，以及互動測驗。</p>
+          </div>
+          <span class="open">開啟三角與極限筆記</span>
         </a>
       </section>
 

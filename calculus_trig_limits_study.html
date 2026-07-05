@@ -1,0 +1,924 @@
+<!doctype html>
+<html lang="zh-Hant-TW">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>微積分第 2 堂：三角函數與極限</title>
+  <script>
+    window.MathJax = {
+      tex: { inlineMath: [["\\(", "\\)"], ["$", "$"]], displayMath: [["\\[", "\\]"]] },
+      svg: { fontCache: "global" }
+    };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+  <style>
+    :root {
+      --ink: #1f2937;
+      --muted: #667085;
+      --paper: #fffaf2;
+      --surface: #ffffff;
+      --line: #d8dee8;
+      --teal: #0f766e;
+      --teal-soft: #e7f6f3;
+      --indigo: #3730a3;
+      --indigo-soft: #ecebff;
+      --amber: #b45309;
+      --amber-soft: #fff0d2;
+      --rose: #be123c;
+      --rose-soft: #ffe4e6;
+      --ok: #15803d;
+      --shadow: 0 18px 46px rgba(31, 41, 55, 0.12);
+      --radius: 8px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: var(--paper);
+      font-family: "Noto Sans TC", "Microsoft JhengHei", "PingFang TC", system-ui, sans-serif;
+      line-height: 1.75;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      border-bottom: 1px solid rgba(31, 41, 55, 0.12);
+      background: rgba(255, 250, 242, 0.94);
+      backdrop-filter: blur(14px);
+    }
+
+    .nav {
+      width: min(1180px, calc(100% - 32px));
+      min-height: 64px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    .mark {
+      width: 36px;
+      height: 36px;
+      display: grid;
+      place-items: center;
+      border-radius: var(--radius);
+      background: var(--ink);
+      color: #fff;
+      font-family: Georgia, serif;
+      font-size: 18px;
+    }
+
+    .navlinks {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 8px;
+    }
+
+    .navlinks a, .ghost {
+      min-height: 36px;
+      padding: 6px 11px;
+      border: 1px solid transparent;
+      border-radius: var(--radius);
+      color: var(--ink);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 800;
+    }
+
+    .navlinks a:hover, .ghost:hover {
+      border-color: var(--line);
+      background: #fff;
+    }
+
+    .hero {
+      min-height: 92vh;
+      display: grid;
+      align-items: center;
+      padding: 72px 0 56px;
+      background:
+        linear-gradient(90deg, rgba(255,250,242,.98), rgba(255,250,242,.78)),
+        url("data:image/svg+xml,%3Csvg width='1600' height='900' viewBox='0 0 1600 900' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='1600' height='900' fill='%23f8efe0'/%3E%3Cg stroke='%231f2937' stroke-opacity='.14' fill='none'%3E%3Cpath d='M170 700H1450M250 120V760' stroke-width='4'/%3E%3Cpath d='M250 455C380 295 500 295 630 455C760 615 880 615 1010 455C1140 295 1260 295 1390 455' stroke='%230f766e' stroke-width='7'/%3E%3Cpath d='M250 455C380 615 500 615 630 455C760 295 880 295 1010 455C1140 615 1260 615 1390 455' stroke='%233730a3' stroke-width='6'/%3E%3Cpath d='M410 180L500 735M745 180L835 735M1080 180L1170 735' stroke='%23b45309' stroke-width='5' stroke-dasharray='18 18'/%3E%3C/g%3E%3C/svg%3E");
+      background-size: cover;
+      background-position: center;
+    }
+
+    .container {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+
+    .kicker {
+      margin: 0 0 14px;
+      color: var(--teal);
+      font-size: 15px;
+      font-weight: 900;
+    }
+
+    h1 {
+      max-width: 920px;
+      margin: 0;
+      font-size: clamp(38px, 7vw, 74px);
+      line-height: 1.05;
+      letter-spacing: 0;
+    }
+
+    .lead {
+      max-width: 820px;
+      margin: 24px 0 0;
+      color: #344054;
+      font-size: clamp(17px, 2vw, 21px);
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 30px;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 44px;
+      padding: 0 16px;
+      border: 1px solid var(--ink);
+      border-radius: var(--radius);
+      background: var(--ink);
+      color: #fff;
+      text-decoration: none;
+      font-weight: 900;
+      cursor: pointer;
+      font-family: inherit;
+      font-size: 15px;
+    }
+
+    .button.secondary {
+      background: #fff;
+      color: var(--ink);
+    }
+
+    main section {
+      padding: 56px 0;
+      border-top: 1px solid rgba(31, 41, 55, 0.08);
+    }
+
+    h2 {
+      margin: 0 0 14px;
+      font-size: clamp(28px, 4vw, 44px);
+      line-height: 1.15;
+      letter-spacing: 0;
+    }
+
+    h3 {
+      margin: 0 0 12px;
+      font-size: 22px;
+      line-height: 1.3;
+      letter-spacing: 0;
+    }
+
+    p { margin: 0 0 12px; }
+    ul, ol { margin-top: 8px; padding-left: 1.4rem; }
+    li + li { margin-top: 6px; }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+      align-items: start;
+    }
+
+    .three {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .panel, .quiz-card {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--surface);
+      box-shadow: var(--shadow);
+    }
+
+    .panel {
+      padding: 22px;
+    }
+
+    .note {
+      border-left: 5px solid var(--amber);
+      border-radius: 0 var(--radius) var(--radius) 0;
+      background: var(--amber-soft);
+      padding: 16px 18px;
+      color: #53320a;
+    }
+
+    .emphasis {
+      border-left: 5px solid var(--rose);
+      background: var(--rose-soft);
+      color: #691022;
+    }
+
+    .verified {
+      border-left-color: var(--teal);
+      background: var(--teal-soft);
+      color: #134e4a;
+    }
+
+    .tag {
+      display: inline-flex;
+      width: fit-content;
+      min-height: 28px;
+      align-items: center;
+      padding: 0 9px;
+      border-radius: 999px;
+      background: var(--indigo-soft);
+      color: var(--indigo);
+      font-size: 13px;
+      font-weight: 900;
+      vertical-align: middle;
+    }
+
+    .tag.hot {
+      background: var(--rose-soft);
+      color: var(--rose);
+    }
+
+    .tag.ok {
+      background: var(--teal-soft);
+      color: var(--teal);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      overflow: hidden;
+      border-radius: var(--radius);
+      background: #fff;
+      font-size: 15px;
+    }
+
+    th, td {
+      padding: 11px 12px;
+      border: 1px solid var(--line);
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      background: var(--indigo-soft);
+      color: var(--indigo);
+      font-weight: 900;
+    }
+
+    .formula {
+      padding: 14px 16px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fff;
+      overflow-x: auto;
+      font-weight: 800;
+    }
+
+    .visual {
+      width: 100%;
+      min-height: 250px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fff;
+      overflow: hidden;
+    }
+
+    .quiz-head {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    .progress {
+      min-width: 220px;
+      height: 12px;
+      overflow: hidden;
+      border-radius: 999px;
+      background: #e5e7eb;
+    }
+
+    .bar {
+      width: 0;
+      height: 100%;
+      background: linear-gradient(90deg, var(--teal), var(--indigo));
+      transition: width .2s ease;
+    }
+
+    .quiz-card {
+      padding: 18px;
+      box-shadow: none;
+    }
+
+    .quiz-card + .quiz-card { margin-top: 14px; }
+
+    .question-title {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      margin-bottom: 12px;
+      font-weight: 900;
+    }
+
+    .options {
+      display: grid;
+      gap: 8px;
+    }
+
+    .option {
+      display: flex;
+      gap: 9px;
+      align-items: flex-start;
+      padding: 11px 12px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fff;
+      cursor: pointer;
+    }
+
+    .option input { margin-top: 6px; }
+
+    .option.correct {
+      border-color: rgba(21, 128, 61, .5);
+      background: #ecfdf3;
+    }
+
+    .option.wrong {
+      border-color: rgba(190, 18, 60, .45);
+      background: #fff1f2;
+    }
+
+    .explanation {
+      display: none;
+      margin-top: 12px;
+      padding: 12px;
+      border-left: 4px solid var(--teal);
+      border-radius: 0 var(--radius) var(--radius) 0;
+      background: var(--teal-soft);
+    }
+
+    .score {
+      display: none;
+      margin: 18px 0;
+      padding: 16px 18px;
+      border-radius: var(--radius);
+      background: var(--indigo-soft);
+      color: var(--indigo);
+      font-weight: 900;
+      font-size: 18px;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    @media (max-width: 900px) {
+      .grid, .three { grid-template-columns: 1fr; }
+      .nav { align-items: flex-start; flex-direction: column; padding: 12px 0; }
+      .navlinks { justify-content: flex-start; }
+      .hero { align-items: start; }
+      table { font-size: 14px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <nav class="nav" aria-label="主選單">
+      <a class="brand ghost" href="index.html"><span class="mark">∫</span><span>暑修互動筆記</span></a>
+      <div class="navlinks">
+        <a href="#trig">三角函數</a>
+        <a href="#graphs">圖形週期</a>
+        <a href="#formulas">常見公式</a>
+        <a href="#limits">極限</a>
+        <a href="#quiz">測驗</a>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="container">
+        <p class="kicker">微積分第 2 堂｜PDF 第 9-16 頁 + 4 段錄音核對</p>
+        <h1>三角函數、圖形週期與極限入門</h1>
+        <p class="lead">
+          本頁整理弧度制、六大三角函數、特殊角、三角恆等式、圖形與週期、和差角/倍角/半角公式，以及極限的左右極限判斷。星號與老師口頭強調處已用醒目標籤標註，並附上互動測驗。
+        </p>
+        <div class="hero-actions">
+          <a class="button" href="#emphasis">先看星號重點</a>
+          <a class="button secondary" href="#quiz">直接練習測驗</a>
+        </div>
+      </div>
+    </section>
+
+    <section id="emphasis">
+      <div class="container">
+        <h2>老師強調與驗證摘要</h2>
+        <div class="grid">
+          <div class="note emphasis">
+            <h3>星號／必考感重點</h3>
+            <ul>
+              <li><strong>三角函數前三個最重要：</strong>\(\sin\theta\)、\(\cos\theta\)、\(\tan\theta\)。錄音中老師說「一定要記前三個、前三個最重要」。</li>
+              <li><strong>基本恆等式：</strong>\(\sin^2\theta+\cos^2\theta=1\)，並可推出 \(1+\tan^2\theta=\sec^2\theta\)、\(1+\cot^2\theta=\csc^2\theta\)。</li>
+              <li><strong>半角公式正負號：</strong>講義常在第一象限例題使用正號，但嚴謹判斷必須看 \(\theta/2\) 所在象限。</li>
+              <li><strong>極限存在條件：</strong>左極限與右極限必須相等，二側極限才存在。</li>
+            </ul>
+          </div>
+          <div class="note verified">
+            <h3>逐條驗證與相斥標註</h3>
+            <ul>
+              <li><span class="tag ok">已核對</span> 角度與弧度換算、特殊角表、三角恆等式與圖形週期皆與講義頁面一致。</li>
+              <li><span class="tag ok">已核對</span> 錄音確認：\(\tan 90^\circ\) 不把它當成函數值「無限大」，數學上是<strong>不存在</strong>。</li>
+              <li><span class="tag hot">待查證</span> 第 16 頁根式極限旁有紅色註記，視覺上不易判定是否屬於同一題；依講義式子與標準代數，\(\lim_{x\to 4}\frac{x-4}{\sqrt{x}-2}=4\)。</li>
+              <li><span class="tag hot">更正提醒</span> 錄音開頭老師更正上一堂數值：\(\sqrt{2}\approx1.414\)，不是 \(\log 2\)；本頁不把該錯誤沿用為知識點。</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="trig">
+      <div class="container">
+        <h2>一、角度、弧度與六大三角函數</h2>
+        <div class="grid">
+          <div class="panel">
+            <h3>弧度制</h3>
+            <p>弧度把「圓弧長」與「半徑」連起來：</p>
+            <div class="formula">\[\theta=\frac{s}{r}\]</div>
+            <p>其中 \(s\) 是弧長、\(r\) 是半徑。常用換算：</p>
+            <table>
+              <thead><tr><th>角度</th><th>弧度</th><th>備註</th></tr></thead>
+              <tbody>
+                <tr><td>\(360^\circ\)</td><td>\(2\pi\)</td><td>一圈</td></tr>
+                <tr><td>\(180^\circ\)</td><td>\(\pi\)</td><td>半圈</td></tr>
+                <tr><td>\(90^\circ\)</td><td>\(\frac{\pi}{2}\)</td><td>垂直角，老師口頭說很重要</td></tr>
+                <tr><td>\(60^\circ\)</td><td>\(\frac{\pi}{3}\)</td><td>特殊角</td></tr>
+                <tr><td>\(45^\circ\)</td><td>\(\frac{\pi}{4}\)</td><td>特殊角</td></tr>
+                <tr><td>\(30^\circ\)</td><td>\(\frac{\pi}{6}\)</td><td>特殊角</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="panel">
+            <h3>單位圓定義 <span class="tag hot">星號重點</span></h3>
+            <svg class="visual" viewBox="0 0 520 320" role="img" aria-label="單位圓與三角函數定義">
+              <rect width="520" height="320" fill="#fff"/>
+              <line x1="60" y1="160" x2="470" y2="160" stroke="#667085" stroke-width="2"/>
+              <line x1="250" y1="285" x2="250" y2="35" stroke="#667085" stroke-width="2"/>
+              <circle cx="250" cy="160" r="105" fill="none" stroke="#0f766e" stroke-width="4"/>
+              <line x1="250" y1="160" x2="335" y2="98" stroke="#3730a3" stroke-width="5"/>
+              <line x1="335" y1="98" x2="335" y2="160" stroke="#b45309" stroke-width="4" stroke-dasharray="8 6"/>
+              <line x1="250" y1="160" x2="335" y2="160" stroke="#be123c" stroke-width="4"/>
+              <path d="M286 160A36 36 0 0 0 279 139" fill="none" stroke="#1f2937" stroke-width="3"/>
+              <text x="290" y="148" font-size="18" fill="#1f2937">θ</text>
+              <text x="287" y="188" font-size="16" fill="#be123c">x = r cosθ</text>
+              <text x="348" y="132" font-size="16" fill="#b45309">y = r sinθ</text>
+              <text x="292" y="92" font-size="16" fill="#3730a3">r</text>
+              <circle cx="335" cy="98" r="6" fill="#3730a3"/>
+            </svg>
+            <ul>
+              <li>\(\sin\theta=\frac{y}{r}\)，\(\cos\theta=\frac{x}{r}\)，\(\tan\theta=\frac{y}{x}=\frac{\sin\theta}{\cos\theta}\)。</li>
+              <li>\(\csc\theta=\frac{1}{\sin\theta}\)，\(\sec\theta=\frac{1}{\cos\theta}\)，\(\cot\theta=\frac{1}{\tan\theta}\)。</li>
+              <li>直角座標與極座標互換：\(x=r\cos\theta\)、\(y=r\sin\theta\)、\(r=\sqrt{x^2+y^2}\)。</li>
+              <li>使用 \(\theta=\tan^{-1}(y/x)\) 時要留意象限，因為反正切本身不會自動告訴你完整象限資訊。</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="container">
+        <h2>二、三角恆等式與特殊角表</h2>
+        <div class="grid">
+          <div class="panel">
+            <h3>基本恆等式 <span class="tag hot">星號重點</span></h3>
+            <div class="formula">\[\sin^2\theta+\cos^2\theta=1\]</div>
+            <p>兩邊同除以 \(\cos^2\theta\)：</p>
+            <div class="formula">\[1+\tan^2\theta=\sec^2\theta\]</div>
+            <p>兩邊同除以 \(\sin^2\theta\)：</p>
+            <div class="formula">\[1+\cot^2\theta=\csc^2\theta\]</div>
+          </div>
+          <div class="panel">
+            <h3>特殊角的值</h3>
+            <table>
+              <thead>
+                <tr><th>\(\theta\)</th><th>\(0\)</th><th>\(\pi/6\)</th><th>\(\pi/4\)</th><th>\(\pi/3\)</th><th>\(\pi/2\)</th></tr>
+              </thead>
+              <tbody>
+                <tr><th>\(\sin\theta\)</th><td>0</td><td>\(1/2\)</td><td>\(\sqrt2/2\)</td><td>\(\sqrt3/2\)</td><td>1</td></tr>
+                <tr><th>\(\cos\theta\)</th><td>1</td><td>\(\sqrt3/2\)</td><td>\(\sqrt2/2\)</td><td>\(1/2\)</td><td>0</td></tr>
+                <tr><th>\(\tan\theta\)</th><td>0</td><td>\(\sqrt3/3\)</td><td>1</td><td>\(\sqrt3\)</td><td>不存在</td></tr>
+              </tbody>
+            </table>
+            <p class="note">驗證：\(\tan\theta=\frac{\sin\theta}{\cos\theta}\)。當 \(\theta=\pi/2\) 時分母 \(\cos\theta=0\)，所以 \(\tan(\pi/2)\) 的函數值不存在。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="graphs">
+      <div class="container">
+        <h2>三、三角函數圖形、週期與平移伸縮</h2>
+        <div class="grid">
+          <div class="panel">
+            <h3>\(\sin x\) 與 \(\cos x\)</h3>
+            <svg class="visual" viewBox="0 0 640 300" role="img" aria-label="正弦與餘弦圖形">
+              <rect width="640" height="300" fill="#fff"/>
+              <line x1="45" y1="150" x2="610" y2="150" stroke="#667085" stroke-width="2"/>
+              <line x1="70" y1="40" x2="70" y2="260" stroke="#667085" stroke-width="2"/>
+              <path d="M70 150 C120 60 170 60 220 150 C270 240 320 240 370 150 C420 60 470 60 520 150 C565 230 590 230 610 190" fill="none" stroke="#0f766e" stroke-width="5"/>
+              <path d="M70 60 C120 60 170 240 220 240 C270 240 320 60 370 60 C420 60 470 240 520 240 C565 240 590 120 610 100" fill="none" stroke="#3730a3" stroke-width="5"/>
+              <text x="520" y="120" font-size="17" fill="#0f766e">sin x</text>
+              <text x="520" y="226" font-size="17" fill="#3730a3">cos x</text>
+              <text x="62" y="32" font-size="15" fill="#1f2937">1</text>
+              <text x="54" y="270" font-size="15" fill="#1f2937">-1</text>
+              <text x="206" y="174" font-size="15" fill="#1f2937">π</text>
+              <text x="354" y="174" font-size="15" fill="#1f2937">2π</text>
+            </svg>
+            <ul>
+              <li>\(-1\leq\sin x\leq1\)，\(-1\leq\cos x\leq1\)。</li>
+              <li>\(\sin(n\pi)=0\)。</li>
+              <li>\(\cos x\) 是偶函數：\(\cos(-x)=\cos x\)。</li>
+              <li>\(\sin x\) 是奇函數：\(\sin(-x)=-\sin x\)。</li>
+            </ul>
+          </div>
+          <div class="panel">
+            <h3>圖形變換</h3>
+            <table>
+              <thead><tr><th>形式</th><th>圖形意義</th></tr></thead>
+              <tbody>
+                <tr><td>\(y=\sin(x+a)\)</td><td>向左平移 \(a\)</td></tr>
+                <tr><td>\(y=\sin(x-a)\)</td><td>向右平移 \(a\)</td></tr>
+                <tr><td>\(y=\sin x+b\)</td><td>上下平移 \(b\)</td></tr>
+                <tr><td>\(y=\sin(cx)\)</td><td>水平方向壓縮，週期變為 \(\frac{2\pi}{|c|}\)</td></tr>
+                <tr><td>\(y=d\sin x\)</td><td>垂直伸縮，振幅變為 \(|d|\)</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="panel" style="margin-top:18px">
+          <h3>倒數函數與漸近線</h3>
+          <table>
+            <thead><tr><th>函數</th><th>週期</th><th>不存在/垂直漸近線</th><th>理由</th></tr></thead>
+            <tbody>
+              <tr><td>\(\csc x=1/\sin x\)</td><td>\(2\pi\)</td><td>\(x=n\pi\)</td><td>\(\sin x=0\)</td></tr>
+              <tr><td>\(\sec x=1/\cos x\)</td><td>\(2\pi\)</td><td>\(x=\frac{\pi}{2}+n\pi\)</td><td>\(\cos x=0\)</td></tr>
+              <tr><td>\(\tan x=\sin x/\cos x\)</td><td>\(\pi\)</td><td>\(x=\frac{\pi}{2}+n\pi\)</td><td>\(\cos x=0\)</td></tr>
+              <tr><td>\(\cot x=\cos x/\sin x\)</td><td>\(\pi\)</td><td>\(x=n\pi\)</td><td>\(\sin x=0\)</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section id="formulas">
+      <div class="container">
+        <h2>四、三角函數常見公式</h2>
+        <div class="grid">
+          <div class="panel">
+            <h3>和差角公式 <span class="tag hot">星號重點</span></h3>
+            <div class="formula">\[
+              \sin(\alpha\pm\beta)=\sin\alpha\cos\beta\pm\cos\alpha\sin\beta
+            \]</div>
+            <div class="formula">\[
+              \cos(\alpha\pm\beta)=\cos\alpha\cos\beta\mp\sin\alpha\sin\beta
+            \]</div>
+            <div class="formula">\[
+              \tan(\alpha\pm\beta)=\frac{\tan\alpha\pm\tan\beta}{1\mp\tan\alpha\tan\beta}
+            \]</div>
+          </div>
+          <div class="panel">
+            <h3>倍角與半角</h3>
+            <div class="formula">\[
+              \sin(2\theta)=2\sin\theta\cos\theta
+            \]</div>
+            <div class="formula">\[
+              \cos(2\theta)=\cos^2\theta-\sin^2\theta=1-2\sin^2\theta=2\cos^2\theta-1
+            \]</div>
+            <div class="formula">\[
+              \sin\frac{\theta}{2}=\pm\sqrt{\frac{1-\cos\theta}{2}},\quad
+              \cos\frac{\theta}{2}=\pm\sqrt{\frac{1+\cos\theta}{2}}
+            \]</div>
+            <p class="note emphasis"><strong>驗證備註：</strong>錄音確認老師提醒「其實有正負號」。講義例題常落在第一象限而取正，但一般解題必須看 \(\theta/2\) 的象限決定正負。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="limits">
+      <div class="container">
+        <h2>五、極限：從接近到判斷存在</h2>
+        <div class="grid">
+          <div class="panel">
+            <h3>極限與左右極限 <span class="tag hot">星號重點</span></h3>
+            <p>\(\lim_{x\to a}f(x)=L\) 表示 \(x\) 越來越接近 \(a\) 時，\(f(x)\) 越來越接近 \(L\)。</p>
+            <div class="formula">\[
+              \lim_{x\to a^-}f(x)=\lim_{x\to a^+}f(x)=L
+              \Rightarrow \lim_{x\to a}f(x)=L
+            \]</div>
+            <p>若左極限與右極限不同，二側極限不存在。</p>
+          </div>
+          <div class="panel">
+            <h3>極限定律</h3>
+            <table>
+              <thead><tr><th>運算</th><th>公式</th></tr></thead>
+              <tbody>
+                <tr><td>常數</td><td>\(\lim_{x\to a}k=k\)</td></tr>
+                <tr><td>倍數</td><td>\(\lim kf(x)=kL\)</td></tr>
+                <tr><td>和差</td><td>\(\lim(f\pm g)=L\pm M\)</td></tr>
+                <tr><td>乘法</td><td>\(\lim(fg)=LM\)</td></tr>
+                <tr><td>除法</td><td>\(\lim\frac{f}{g}=\frac{L}{M}\)，但 \(M\neq0\)</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="grid" style="margin-top:18px">
+          <div class="panel">
+            <h3>例題型整理</h3>
+            <ol>
+              <li>\(\lim_{x\to2}(x^2+2x+7)=15\)。多項式可直接代入。</li>
+              <li>\(\lim_{x\to1}\frac{x^2+2x-3}{x-1}=\lim_{x\to1}(x+3)=4\)。先因式分解消去可消因子。</li>
+              <li>\(\lim_{x\to4}\frac{x-4}{\sqrt{x}-2}=4\)。乘以共軛式後消去 \(x-4\)。</li>
+              <li>\(\lim_{x\to0}\frac{|x|}{x}\) 不存在，因為左極限為 \(-1\)、右極限為 \(1\)。</li>
+            </ol>
+          </div>
+          <div class="panel">
+            <h3>分段函數判斷</h3>
+            <p>若</p>
+            <div class="formula">\[
+              f(x)=
+              \begin{cases}
+                x+2, & x\le 3\\
+                10-x, & x>3
+              \end{cases}
+            \]</div>
+            <p>則 \(\lim_{x\to3^-}f(x)=5\)，\(\lim_{x\to3^+}f(x)=7\)，左右極限不同，所以 \(\lim_{x\to3}f(x)\) 不存在。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="quiz">
+      <div class="container">
+        <div class="quiz-head">
+          <div>
+            <h2>階段複習測驗</h2>
+            <p>共 18 題：觀念題 12 題、計算題 6 題。星號重點已優先納入。</p>
+          </div>
+          <div>
+            <div class="progress" aria-label="作答進度"><div class="bar" id="progressBar"></div></div>
+            <p id="progressText" style="margin:6px 0 0;color:var(--muted);font-weight:800">已作答 0 / 18</p>
+          </div>
+        </div>
+        <div id="scoreBox" class="score"></div>
+        <div id="quizList"></div>
+        <div class="actions">
+          <button class="button" id="submitBtn" type="button">交卷計分</button>
+          <button class="button secondary" id="resetBtn" type="button">重作測驗</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const questions = [
+      {
+        type: "觀念",
+        q: "弧度的定義最符合哪一個式子？",
+        options: ["\\(\\theta=s/r\\)", "\\(\\theta=r/s\\)", "\\(\\theta=sr\\)", "\\(\\theta=s+r\\)"],
+        answer: 0,
+        explain: "弧度是弧長除以半徑，\\(\\theta=s/r\\)。"
+      },
+      {
+        type: "觀念",
+        q: "老師口頭強調三角函數中最重要、最先要記的是哪三個？",
+        options: ["\\(\\sin,\\cos,\\tan\\)", "\\(\\csc,\\sec,\\cot\\)", "\\(\\sin,\\sec,\\cot\\)", "\\(\\tan,\\csc,\\cos\\)"],
+        answer: 0,
+        explain: "錄音中老師說前三個最重要，也就是 \\(\\sin\\theta\\)、\\(\\cos\\theta\\)、\\(\\tan\\theta\\)。"
+      },
+      {
+        type: "觀念",
+        q: "\\(\\tan\\theta\\) 的定義可寫成哪一個？",
+        options: ["\\(\\sin\\theta/\\cos\\theta\\)", "\\(\\cos\\theta/\\sin\\theta\\)", "\\(1/\\cos\\theta\\)", "\\(1/\\sin\\theta\\)"],
+        answer: 0,
+        explain: "\\(\\tan\\theta=y/x\\)，也等於 \\(\\sin\\theta/\\cos\\theta\\)。"
+      },
+      {
+        type: "觀念",
+        q: "\\(\\tan(\\pi/2)\\) 在函數值上應如何判斷？",
+        options: ["不存在", "等於 0", "等於 1", "等於 \\(\\infty\\) 並視為實數函數值"],
+        answer: 0,
+        explain: "\\(\\tan x=\\sin x/\\cos x\\)，在 \\(\\pi/2\\) 時分母為 0，函數值不存在。"
+      },
+      {
+        type: "觀念",
+        q: "哪一個是基本三角恆等式？",
+        options: ["\\(\\sin^2\\theta+\\cos^2\\theta=1\\)", "\\(\\sin\\theta+\\cos\\theta=1\\)", "\\(\\tan^2\\theta+\\sec^2\\theta=1\\)", "\\(\\csc\\theta+\\sec\\theta=1\\)"],
+        answer: 0,
+        explain: "單位圓配合畢氏定理得到 \\(\\sin^2\\theta+\\cos^2\\theta=1\\)。"
+      },
+      {
+        type: "觀念",
+        q: "下列哪一個函數的最小正週期是 \\(\\pi\\)？",
+        options: ["\\(\\tan x\\)", "\\(\\sin x\\)", "\\(\\cos x\\)", "\\(\\sec x\\)"],
+        answer: 0,
+        explain: "\\(\\tan x\\) 與 \\(\\cot x\\) 的最小正週期是 \\(\\pi\\)；\\(\\sin,\\cos,\\sec,\\csc\\) 為 \\(2\\pi\\)。"
+      },
+      {
+        type: "觀念",
+        q: "\\(y=\\sin(x-a)\\) 的圖形如何平移？",
+        options: ["向右平移 \\(a\\)", "向左平移 \\(a\\)", "向上平移 \\(a\\)", "垂直放大 \\(a\\) 倍"],
+        answer: 0,
+        explain: "括號內是 \\(x-a\\) 時，圖形向右平移 \\(a\\)。"
+      },
+      {
+        type: "觀念",
+        q: "下列哪一個關係是正確的奇偶性？",
+        options: ["\\(\\cos(-x)=\\cos x\\)", "\\(\\cos(-x)=-\\cos x\\)", "\\(\\sin(-x)=\\sin x\\)", "\\(\\tan(-x)=\\tan x\\)"],
+        answer: 0,
+        explain: "\\(\\cos x\\) 是偶函數；\\(\\sin x\\)、\\(\\tan x\\) 是奇函數。"
+      },
+      {
+        type: "觀念",
+        q: "使用半角公式時，正負號應由什麼決定？",
+        options: ["\\(\\theta/2\\) 所在象限", "\\(\\theta\\) 是否為整數", "公式永遠取正", "公式永遠取負"],
+        answer: 0,
+        explain: "錄音中特別提醒半角公式有正負號；一般情形要看半角所在象限。"
+      },
+      {
+        type: "觀念",
+        q: "二側極限 \\(\\lim_{x\\to a}f(x)\\) 存在的必要條件是？",
+        options: ["左極限與右極限相等", "函數值 \\(f(a)\\) 必須等於 0", "左極限一定小於右極限", "函數必須是三角函數"],
+        answer: 0,
+        explain: "二側極限存在時，\\(\\lim_{x\\to a^-}f(x)=\\lim_{x\\to a^+}f(x)\\)。"
+      },
+      {
+        type: "觀念",
+        q: "若分段函數在 \\(x=3\\) 的左極限為 5、右極限為 7，則二側極限如何？",
+        options: ["不存在", "等於 5", "等於 7", "等於 6"],
+        answer: 0,
+        explain: "左右極限不相等，所以二側極限不存在。"
+      },
+      {
+        type: "觀念",
+        q: "求根式極限時，常用哪個代數技巧消去根號造成的 \\(0/0\\)？",
+        options: ["乘以共軛式", "直接把分母改成 1", "把 \\(x\\) 當 0", "把根號刪掉"],
+        answer: 0,
+        explain: "例如 \\((\\sqrt{x}-2)\\) 的共軛式是 \\((\\sqrt{x}+2)\\)，相乘可得到 \\(x-4\\)。"
+      },
+      {
+        type: "計算",
+        q: "\\(150^\\circ\\) 等於多少弧度？",
+        options: ["\\(5\\pi/6\\)", "\\(2\\pi/3\\)", "\\(3\\pi/4\\)", "\\(7\\pi/6\\)"],
+        answer: 0,
+        explain: "\\(150^\\circ\\times\\pi/180^\\circ=5\\pi/6\\)。"
+      },
+      {
+        type: "計算",
+        q: "\\(\\sin(\\pi/6)\\) 與 \\(\\cos(\\pi/3)\\) 分別為何？",
+        options: ["\\(1/2,\\;1/2\\)", "\\(\\sqrt3/2,\\;1/2\\)", "\\(1/2,\\;\\sqrt3/2\\)", "\\(\\sqrt2/2,\\;\\sqrt2/2\\)"],
+        answer: 0,
+        explain: "特殊角表：\\(\\sin30^\\circ=1/2\\)，\\(\\cos60^\\circ=1/2\\)。"
+      },
+      {
+        type: "計算",
+        q: "由 \\(\\sin^2\\theta+\\cos^2\\theta=1\\) 推得 \\(1+\\tan^2\\theta\\) 等於？",
+        options: ["\\(\\sec^2\\theta\\)", "\\(\\csc^2\\theta\\)", "\\(\\cos^2\\theta\\)", "\\(\\sin^2\\theta\\)"],
+        answer: 0,
+        explain: "兩邊除以 \\(\\cos^2\\theta\\)：\\(\\tan^2\\theta+1=\\sec^2\\theta\\)。"
+      },
+      {
+        type: "計算",
+        q: "\\(\\lim_{x\\to2}(x^2+2x+7)\\) 為何？",
+        options: ["15", "11", "13", "不存在"],
+        answer: 0,
+        explain: "多項式直接代入：\\(2^2+2\\cdot2+7=15\\)。"
+      },
+      {
+        type: "計算",
+        q: "\\(\\lim_{x\\to1}\\frac{x^2+2x-3}{x-1}\\) 為何？",
+        options: ["4", "0", "不存在", "1"],
+        answer: 0,
+        explain: "分子因式分解為 \\((x-1)(x+3)\\)，消去 \\(x-1\\) 後代入得 4。"
+      },
+      {
+        type: "計算",
+        q: "\\(\\lim_{x\\to0}\\frac{|x|}{x}\\) 為何？",
+        options: ["不存在", "0", "1", "-1"],
+        answer: 0,
+        explain: "右極限為 1，左極限為 -1，左右不同，所以二側極限不存在。"
+      }
+    ];
+
+    const quizList = document.getElementById("quizList");
+    const progressBar = document.getElementById("progressBar");
+    const progressText = document.getElementById("progressText");
+    const scoreBox = document.getElementById("scoreBox");
+    const submitBtn = document.getElementById("submitBtn");
+    const resetBtn = document.getElementById("resetBtn");
+
+    function renderQuiz() {
+      quizList.innerHTML = questions.map((item, index) => {
+        const opts = item.options.map((option, optIndex) => `
+          <label class="option" data-question="${index}" data-option="${optIndex}">
+            <input type="radio" name="q${index}" value="${optIndex}" />
+            <span>${option}</span>
+          </label>
+        `).join("");
+        return `
+          <article class="quiz-card" id="card-${index}">
+            <div class="question-title">
+              <span class="tag ${item.type === "計算" ? "ok" : ""}">${item.type}</span>
+              <span>${index + 1}. ${item.q}</span>
+            </div>
+            <div class="options">${opts}</div>
+            <div class="explanation" id="explain-${index}">${item.explain}</div>
+          </article>
+        `;
+      }).join("");
+
+      quizList.querySelectorAll("input").forEach(input => {
+        input.addEventListener("change", updateProgress);
+      });
+
+      if (window.MathJax?.typesetPromise) {
+        window.MathJax.typesetPromise([quizList]);
+      }
+      updateProgress();
+    }
+
+    function getSelected(index) {
+      const checked = document.querySelector(`input[name="q${index}"]:checked`);
+      return checked ? Number(checked.value) : null;
+    }
+
+    function updateProgress() {
+      const answered = questions.reduce((sum, _, index) => sum + (getSelected(index) !== null ? 1 : 0), 0);
+      const pct = Math.round((answered / questions.length) * 100);
+      progressBar.style.width = `${pct}%`;
+      progressText.textContent = `已作答 ${answered} / ${questions.length}`;
+    }
+
+    function submitQuiz() {
+      let score = 0;
+      questions.forEach((item, index) => {
+        const selected = getSelected(index);
+        if (selected === item.answer) score += 1;
+
+        document.querySelectorAll(`[data-question="${index}"]`).forEach(label => {
+          const opt = Number(label.dataset.option);
+          label.classList.toggle("correct", opt === item.answer);
+          label.classList.toggle("wrong", selected === opt && opt !== item.answer);
+        });
+        document.getElementById(`explain-${index}`).style.display = "block";
+      });
+
+      scoreBox.style.display = "block";
+      scoreBox.textContent = `得分：${score} / ${questions.length}。${score === questions.length ? "太穩了，星號重點都有抓住。" : "看綠色正解與詳解，特別回頭補強星號重點。"}`;
+      if (window.MathJax?.typesetPromise) {
+        window.MathJax.typesetPromise([quizList, scoreBox]);
+      }
+    }
+
+    function resetQuiz() {
+      document.querySelectorAll("input[type='radio']").forEach(input => { input.checked = false; });
+      document.querySelectorAll(".option").forEach(label => label.classList.remove("correct", "wrong"));
+      document.querySelectorAll(".explanation").forEach(explain => { explain.style.display = "none"; });
+      scoreBox.style.display = "none";
+      scoreBox.textContent = "";
+      updateProgress();
+      document.getElementById("quiz").scrollIntoView({ behavior: "smooth" });
+    }
+
+    submitBtn.addEventListener("click", submitQuiz);
+    resetBtn.addEventListener("click", resetQuiz);
+    renderQuiz();
+  </script>
+</body>
+</html>
