@@ -72,7 +72,7 @@
 
     .cards {
       display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
+      grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 18px;
       margin-top: 42px;
     }
@@ -100,6 +100,7 @@
     .card.physics { border-top: 7px solid var(--teal); }
     .card.calculus { border-top: 7px solid var(--indigo); }
     .card.limits { border-top: 7px solid var(--amber); }
+    .card.derivatives { border-top: 7px solid #be123c; }
 
     .eyebrow {
       display: inline-flex;
@@ -122,6 +123,11 @@
     .limits .eyebrow {
       background: var(--amber-soft);
       color: var(--amber);
+    }
+
+    .derivatives .eyebrow {
+      background: #ffe4e6;
+      color: #be123c;
     }
 
     h2 {
@@ -170,7 +176,7 @@
       <p class="kicker">114 學程暑修互動筆記</p>
       <h1>普通物理與微積分學習入口</h1>
       <p class="lead">
-        這裡收錄三份可互動複習的靜態網頁：普通物理的測量與一維運動、微積分前 7 頁的函數指數對數，以及微積分第 2 堂的三角函數與極限。
+        這裡收錄四份可互動複習的靜態網頁：普通物理的測量與一維運動、微積分函數指數對數、三角函數與極限，以及第三堂的連續性、導數與微分法則。
       </p>
 
       <section class="cards" aria-label="課程入口">
@@ -199,6 +205,15 @@
             <p>涵蓋弧度制、六大三角函數、特殊角、恆等式、圖形與週期、和差角與半角公式、左右極限，以及互動測驗。</p>
           </div>
           <span class="open">開啟三角與極限筆記</span>
+        </a>
+
+        <a class="card derivatives" href="calculus_derivatives_study.html">
+          <div>
+            <span class="eyebrow">微積分第 3 堂</span>
+            <h2>連續性、導數與微分法則</h2>
+            <p>整合極限技巧、連續性三條件、導數定義、切線斜率、冪次微分、乘法/商數法則與連鎖律，含重點卡與互動測驗。</p>
+          </div>
+          <span class="open">開啟導數筆記</span>
         </a>
       </section>
 

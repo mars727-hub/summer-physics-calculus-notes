@@ -1,0 +1,842 @@
+<!doctype html>
+<html lang="zh-Hant-TW">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>微積分第三堂：連續性、導數與微分法則</title>
+  <script>
+    window.MathJax = {
+      tex: { inlineMath: [["\\(", "\\)"], ["$", "$"]], displayMath: [["\\[", "\\]"]] },
+      svg: { fontCache: "global" }
+    };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+  <style>
+    :root {
+      --ink: #1f2937;
+      --muted: #667085;
+      --paper: #fffaf2;
+      --surface: #ffffff;
+      --line: #d8dee8;
+      --teal: #0f766e;
+      --teal-soft: #e7f6f3;
+      --indigo: #3730a3;
+      --indigo-soft: #ecebff;
+      --amber: #b45309;
+      --amber-soft: #fff0d2;
+      --rose: #be123c;
+      --rose-soft: #ffe4e6;
+      --ok: #15803d;
+      --shadow: 0 18px 46px rgba(31, 41, 55, 0.12);
+      --radius: 8px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: var(--paper);
+      font-family: "Noto Sans TC", "Microsoft JhengHei", "PingFang TC", system-ui, sans-serif;
+      line-height: 1.75;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      border-bottom: 1px solid rgba(31, 41, 55, 0.12);
+      background: rgba(255, 250, 242, 0.94);
+      backdrop-filter: blur(14px);
+    }
+
+    .nav {
+      width: min(1180px, calc(100% - 32px));
+      min-height: 64px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: var(--ink);
+      text-decoration: none;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    .mark {
+      width: 36px;
+      height: 36px;
+      display: grid;
+      place-items: center;
+      border-radius: var(--radius);
+      background: var(--ink);
+      color: #fff;
+      font-family: Georgia, serif;
+      font-size: 18px;
+    }
+
+    .navlinks {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      gap: 8px;
+    }
+
+    .navlinks a {
+      min-height: 36px;
+      padding: 6px 11px;
+      border: 1px solid transparent;
+      border-radius: var(--radius);
+      color: var(--ink);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 800;
+    }
+
+    .navlinks a:hover {
+      border-color: var(--line);
+      background: #fff;
+    }
+
+    .hero {
+      min-height: 92vh;
+      display: grid;
+      align-items: center;
+      padding: 72px 0 56px;
+      background:
+        linear-gradient(90deg, rgba(255,250,242,.98), rgba(255,250,242,.76)),
+        url("data:image/svg+xml,%3Csvg width='1600' height='900' viewBox='0 0 1600 900' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='1600' height='900' fill='%23f8efe0'/%3E%3Cg fill='none' stroke='%231f2937' stroke-opacity='.14'%3E%3Cpath d='M170 705H1460M250 120V760' stroke-width='4'/%3E%3Cpath d='M260 660C430 650 515 280 690 330C830 370 840 640 980 625C1130 610 1205 310 1400 250' stroke='%230f766e' stroke-width='7'/%3E%3Cpath d='M755 342L1145 650' stroke='%23be123c' stroke-width='6'/%3E%3Cpath d='M1070 190C1160 250 1230 335 1280 455C1330 575 1390 665 1460 710' stroke='%233730a3' stroke-width='6'/%3E%3Cpath d='M1120 235L1290 520L1460 710' stroke='%23b45309' stroke-width='5' stroke-dasharray='18 18'/%3E%3C/g%3E%3C/svg%3E");
+      background-size: cover;
+      background-position: center;
+    }
+
+    .container {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+
+    .kicker {
+      margin: 0 0 14px;
+      color: var(--teal);
+      font-size: 15px;
+      font-weight: 900;
+    }
+
+    h1 {
+      max-width: 950px;
+      margin: 0;
+      font-size: clamp(38px, 7vw, 74px);
+      line-height: 1.05;
+      letter-spacing: 0;
+    }
+
+    .lead {
+      max-width: 840px;
+      margin: 24px 0 0;
+      color: #344054;
+      font-size: clamp(17px, 2vw, 21px);
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 30px;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 44px;
+      padding: 0 16px;
+      border: 1px solid var(--ink);
+      border-radius: var(--radius);
+      background: var(--ink);
+      color: #fff;
+      text-decoration: none;
+      font-weight: 900;
+      cursor: pointer;
+      font-family: inherit;
+      font-size: 15px;
+    }
+
+    .button.secondary {
+      background: #fff;
+      color: var(--ink);
+    }
+
+    main section {
+      padding: 56px 0;
+      border-top: 1px solid rgba(31, 41, 55, 0.08);
+    }
+
+    h2 {
+      margin: 0 0 14px;
+      font-size: clamp(28px, 4vw, 44px);
+      line-height: 1.15;
+      letter-spacing: 0;
+    }
+
+    h3 {
+      margin: 0 0 12px;
+      font-size: 22px;
+      line-height: 1.3;
+      letter-spacing: 0;
+    }
+
+    p { margin: 0 0 12px; }
+    ul, ol { margin-top: 8px; padding-left: 1.4rem; }
+    li + li { margin-top: 6px; }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+      align-items: start;
+    }
+
+    .three { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+
+    .panel, .quiz-card, .flashcard {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--surface);
+      box-shadow: var(--shadow);
+    }
+
+    .panel { padding: 22px; }
+
+    .note {
+      border-left: 5px solid var(--amber);
+      border-radius: 0 var(--radius) var(--radius) 0;
+      background: var(--amber-soft);
+      padding: 16px 18px;
+      color: #53320a;
+    }
+
+    .emphasis {
+      border-left-color: var(--rose);
+      background: var(--rose-soft);
+      color: #691022;
+    }
+
+    .verified {
+      border-left-color: var(--teal);
+      background: var(--teal-soft);
+      color: #134e4a;
+    }
+
+    .tag {
+      display: inline-flex;
+      width: fit-content;
+      min-height: 28px;
+      align-items: center;
+      padding: 0 9px;
+      border-radius: 999px;
+      background: var(--indigo-soft);
+      color: var(--indigo);
+      font-size: 13px;
+      font-weight: 900;
+      vertical-align: middle;
+    }
+
+    .tag.hot { background: var(--rose-soft); color: var(--rose); }
+    .tag.ok { background: var(--teal-soft); color: var(--teal); }
+    .tag.warn { background: var(--amber-soft); color: var(--amber); }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      overflow: hidden;
+      border-radius: var(--radius);
+      background: #fff;
+      font-size: 15px;
+    }
+
+    th, td {
+      padding: 11px 12px;
+      border: 1px solid var(--line);
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      background: var(--indigo-soft);
+      color: var(--indigo);
+      font-weight: 900;
+    }
+
+    .formula {
+      padding: 14px 16px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fff;
+      overflow-x: auto;
+      font-weight: 800;
+    }
+
+    .visual {
+      width: 100%;
+      min-height: 260px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fff;
+      overflow: hidden;
+    }
+
+    .page-guide {
+      display: grid;
+      gap: 14px;
+    }
+
+    .page-item {
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fff;
+    }
+
+    .page-item h3 {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .flash-wrap {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .flashcard {
+      min-height: 180px;
+      padding: 18px;
+      box-shadow: none;
+      cursor: pointer;
+    }
+
+    .flashcard .back { display: none; }
+    .flashcard.flipped .front { display: none; }
+    .flashcard.flipped .back { display: block; }
+
+    .quiz-head {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    .progress {
+      min-width: 220px;
+      height: 12px;
+      overflow: hidden;
+      border-radius: 999px;
+      background: #e5e7eb;
+    }
+
+    .bar {
+      width: 0;
+      height: 100%;
+      background: linear-gradient(90deg, var(--teal), var(--indigo));
+      transition: width .2s ease;
+    }
+
+    .quiz-card {
+      padding: 18px;
+      box-shadow: none;
+    }
+
+    .quiz-card + .quiz-card { margin-top: 14px; }
+
+    .question-title {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      margin-bottom: 12px;
+      font-weight: 900;
+    }
+
+    .options { display: grid; gap: 8px; }
+
+    .option {
+      display: flex;
+      gap: 9px;
+      align-items: flex-start;
+      padding: 11px 12px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fff;
+      cursor: pointer;
+    }
+
+    .option input { margin-top: 6px; }
+    .option.correct { border-color: rgba(21,128,61,.5); background: #ecfdf3; }
+    .option.wrong { border-color: rgba(190,18,60,.45); background: #fff1f2; }
+
+    .explanation {
+      display: none;
+      margin-top: 12px;
+      padding: 12px;
+      border-left: 4px solid var(--teal);
+      border-radius: 0 var(--radius) var(--radius) 0;
+      background: var(--teal-soft);
+    }
+
+    .score {
+      display: none;
+      margin: 18px 0;
+      padding: 16px 18px;
+      border-radius: var(--radius);
+      background: var(--indigo-soft);
+      color: var(--indigo);
+      font-weight: 900;
+      font-size: 18px;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    @media (max-width: 980px) {
+      .grid, .three, .flash-wrap { grid-template-columns: 1fr; }
+      .nav { align-items: flex-start; flex-direction: column; padding: 12px 0; }
+      .navlinks { justify-content: flex-start; }
+      .hero { align-items: start; }
+      table { font-size: 14px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <nav class="nav" aria-label="主選單">
+      <a class="brand" href="index.html"><span class="mark">d</span><span>暑修互動筆記</span></a>
+      <div class="navlinks">
+        <a href="#map">學習地圖</a>
+        <a href="#pages">逐頁導讀</a>
+        <a href="#formulas">公式</a>
+        <a href="#chain">連鎖律</a>
+        <a href="#flashcards">卡片</a>
+        <a href="#quiz">測驗</a>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="container">
+        <p class="kicker">微積分第三堂｜微積分1.pdf 第 19-28 頁 + 微積分2.pdf 第 1 頁 + 完整錄音核對</p>
+        <h1>從連續性走到導數，再到微分法則與連鎖律</h1>
+        <p class="lead">
+          這堂課把前面的極限正式接到微分：先判斷函數在一點是否連續，再用平均變化率的極限定義導數，最後整理冪次、加減、常數倍、乘法、商數與連鎖律。錄音中反覆強調的口訣與考試提醒已用標籤標出。
+        </p>
+        <div class="hero-actions">
+          <a class="button" href="#emphasis">先看老師強調</a>
+          <a class="button secondary" href="#quiz">直接做測驗</a>
+        </div>
+      </div>
+    </section>
+
+    <section id="emphasis">
+      <div class="container">
+        <h2>老師強調與驗證摘要</h2>
+        <div class="grid">
+          <div class="note emphasis">
+            <h3>必考感與星號重點</h3>
+            <ul>
+              <li><strong>連續性三條件：</strong>\(f(a)\) 存在、\(\lim_{x\to a}f(x)\) 存在、且 \(\lim_{x\to a}f(x)=f(a)\)。錄音說「三個條件要同時滿足」。</li>
+              <li><strong>導數定義：</strong>\(f'(x)=\lim_{\Delta x\to0}\frac{f(x+\Delta x)-f(x)}{\Delta x}\)，對應瞬間變化率與切線斜率。</li>
+              <li><strong>冪次微分：</strong>\(\frac{d}{dx}(ax^n)=anx^{n-1}\)。錄音說後面運算要把這個背起來。</li>
+              <li><strong>乘法、商數法則：</strong>錄音明確說「重要、記起來」，講義也用星號/粉色標註。</li>
+              <li><strong>連鎖律：</strong>錄音開頭說「今天最重要」，口訣是「先微外面，再微裡面」。</li>
+            </ul>
+          </div>
+          <div class="note verified">
+            <h3>逐條驗證與待確認</h3>
+            <ul>
+              <li><span class="tag ok">已核對</span> 所有核心公式已對照 PDF 頁面與錄音可辨識片段。</li>
+              <li><span class="tag ok">已核對</span> 第 28 頁綜合題用定義法與商數法都得到 \(f'(0)=-5/4\)。</li>
+              <li><span class="tag warn">需人工確認</span> 第一段錄音含較多三角函數回顧，ASR 對 sec/csc/cot 等詞不穩；本頁只保留「三角函數與圖形屬前情回顧」的脈絡，不把不穩字句當新公式。</li>
+              <li><span class="tag warn">已校正</span> 第 24 頁 \(1/\sqrt{x}\) 的導數依現有知識應為 \(-\frac12x^{-3/2}\)；若手寫指數不清，以冪次法則校正。</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="map">
+      <div class="container">
+        <h2>學習地圖</h2>
+        <div class="grid three">
+          <div class="panel">
+            <h3>1. 極限與連續性</h3>
+            <p>先會判斷極限存在與否，再判斷函數值是否和極限值一致。這是微分前的地基。</p>
+          </div>
+          <div class="panel">
+            <h3>2. 導數定義</h3>
+            <p>把割線斜率的 \(\Delta x\) 逼近 0，得到切線斜率，也就是瞬間變化率。</p>
+          </div>
+          <div class="panel">
+            <h3>3. 微分法則</h3>
+            <p>冪次、加減、常數倍、乘法、商數、連鎖律形成日後解題的主要工具箱。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="pages">
+      <div class="container">
+        <h2>逐頁導讀</h2>
+        <div class="page-guide">
+          <article class="page-item">
+            <h3><span class="tag">微積分1 p.19</span> 極限例題總整理</h3>
+            <p><strong>學習目標：</strong>能用左右極限、因式分解、共軛式、有參數條件、絕對值分段判斷極限。</p>
+            <ul>
+              <li>分段函數：左右極限不同時，二側極限不存在。</li>
+              <li>可消因子：\(\frac{x^2+2x-3}{x-1}=\frac{(x-1)(x+3)}{x-1}\)，極限為 4。</li>
+              <li>根式：乘以共軛式，例如 \(\frac{x-4}{\sqrt{x}-2}\) 的極限為 4。</li>
+              <li>有參數極限：若 \(\frac{x^2+ax+4}{x-1}\) 在 \(x\to1\) 有有限極限，分子在 \(x=1\) 必須為 0，所以 \(a=-5\)，極限為 \(-3\)。</li>
+            </ul>
+          </article>
+
+          <article class="page-item">
+            <h3><span class="tag hot">微積分1 p.20</span> 連續性三條件</h3>
+            <p><strong>核心：</strong>不是圖形看起來接近就叫連續，必須同時檢查函數值、極限值與兩者相等。</p>
+            <div class="formula">\[
+              f(a)\text{ 存在},\quad \lim_{x\to a}f(x)\text{ 存在},\quad \lim_{x\to a}f(x)=f(a)
+            \]</div>
+            <p><strong>常見錯誤：</strong>只看到 \(f(a)\) 有點就說連續；或只看到左右逼近同一高度，卻忘了檢查 \(f(a)\) 是否等於該高度。</p>
+          </article>
+
+          <article class="page-item">
+            <h3><span class="tag hot">微積分1 p.21</span> 導數定義、切線斜率與切線方程式</h3>
+            <p><strong>講義脈絡：</strong>用雲霄飛車高度對時間的圖，先算平均變化率，再讓時間差趨近 0 得到瞬間變化率。</p>
+            <div class="formula">\[
+              f'(x)=\frac{df}{dx}=\lim_{\Delta x\to0}\frac{f(x+\Delta x)-f(x)}{\Delta x}
+            \]</div>
+            <div class="formula">\[
+              f'(a)=\lim_{x\to a}\frac{f(x)-f(a)}{x-a},\qquad
+              y-f(a)=f'(a)(x-a)
+            \]</div>
+          </article>
+
+          <article class="page-item">
+            <h3><span class="tag hot">微積分1 p.22-p.23</span> 冪次微分推導工具</h3>
+            <p>第 22 頁用二項式定理推導 \(ax^n\) 的導數；第 23 頁補階乘、組合與二項式展開。</p>
+            <ul>
+              <li>\(N!=N(N-1)\cdots1\)，且 \(0!=1\)。</li>
+              <li>\(C_k^N=\binom{N}{k}=\frac{N!}{k!(N-k)!}\)。</li>
+              <li>\((a+b)^N=\sum_{k=0}^{N}C_k^Na^{N-k}b^k\)。</li>
+              <li>套入差商後，含 \(\Delta x\) 的高次項在 \(\Delta x\to0\) 時消失，留下 \(anx^{n-1}\)。</li>
+            </ul>
+          </article>
+
+          <article class="page-item">
+            <h3><span class="tag warn">微積分1 p.24</span> 冪次微分練習與考試提醒</h3>
+            <p>遇到根號或分母中的 \(x\)，先改寫成分數次方或負次方，考試常這樣出。</p>
+            <table>
+              <thead><tr><th>原式</th><th>改寫</th><th>導數</th></tr></thead>
+              <tbody>
+                <tr><td>\(5x^3-2x^2+7\)</td><td>多項式</td><td>\(15x^2-4x\)</td></tr>
+                <tr><td>\(\frac1{\sqrt{x}}\)</td><td>\(x^{-1/2}\)</td><td>\(-\frac12x^{-3/2}\)</td></tr>
+                <tr><td>\(3x^{-2}-4x^{3/2}\)</td><td>負次方與分數次方</td><td>\(-6x^{-3}-6x^{1/2}\)</td></tr>
+                <tr><td>\(\frac{x^5}{3}+\frac3{x^3}\)</td><td>\(\frac13x^5+3x^{-3}\)</td><td>\(\frac53x^4-9x^{-4}\)</td></tr>
+              </tbody>
+            </table>
+          </article>
+
+          <article class="page-item">
+            <h3><span class="tag hot">微積分1 p.25-p.27</span> 乘法與商數法則</h3>
+            <p><strong>乘法口訣：</strong>前微後不微 + 前不微後微。</p>
+            <p><strong>商數口訣：</strong>上微下不微 - 上不微下微，除以下平方。</p>
+            <div class="formula">\[
+              (fg)'=f'g+fg',\qquad
+              \left(\frac{f}{g}\right)'=\frac{f'g-fg'}{g^2}
+            \]</div>
+            <p class="note">錄音與講義都提醒：商數法則的答案在考試中通常可保持未化簡，只要法則與代入正確。</p>
+          </article>
+
+          <article class="page-item">
+            <h3><span class="tag">微積分1 p.28</span> 用定義法與商數法求 \(f'(0)\)</h3>
+            <p>題目：</p>
+            <div class="formula">\[
+              f(x)=\frac{x^4-3x^3+5x}{x^6-2x^3+6x-4}
+            \]</div>
+            <p>因 \(f(0)=0\)，用定義法：</p>
+            <div class="formula">\[
+              f'(0)=\lim_{x\to0}\frac{f(x)-f(0)}{x-0}
+              =\lim_{x\to0}\frac{x^3-3x^2+5}{x^6-2x^3+6x-4}
+              =-\frac54
+            \]</div>
+            <p>用商數法也得到 \(-5/4\)，這是兩種方法互相驗證的好例題。</p>
+          </article>
+
+          <article class="page-item">
+            <h3><span class="tag hot">微積分2 p.1</span> 連鎖律</h3>
+            <p>若 \(y=f(u)\)、\(u=g(x)\)，則</p>
+            <div class="formula">\[
+              \frac{dy}{dx}=\frac{dy}{du}\frac{du}{dx},\qquad
+              (f\circ g)'(x)=f'(g(x))g'(x)
+            \]</div>
+            <p><strong>錄音口訣：</strong>先微外面，再微裡面。外面微分時，裡面的 \(g(x)\) 先保留不動；最後乘上 \(g'(x)\)。</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="concepts">
+      <div class="container">
+        <h2>概念整合</h2>
+        <div class="grid">
+          <div class="panel">
+            <h3>割線到切線</h3>
+            <svg class="visual" viewBox="0 0 640 330" role="img" aria-label="割線逼近切線示意圖">
+              <rect width="640" height="330" fill="#fff"/>
+              <line x1="60" y1="270" x2="590" y2="270" stroke="#667085" stroke-width="2"/>
+              <line x1="80" y1="30" x2="80" y2="285" stroke="#667085" stroke-width="2"/>
+              <path d="M95 248C185 230 215 72 315 100C405 126 405 260 555 196" fill="none" stroke="#0f766e" stroke-width="5"/>
+              <line x1="225" y1="111" x2="455" y2="225" stroke="#b45309" stroke-width="5"/>
+              <line x1="210" y1="120" x2="395" y2="168" stroke="#be123c" stroke-width="5"/>
+              <circle cx="225" cy="111" r="7" fill="#0f766e"/>
+              <circle cx="455" cy="225" r="7" fill="#b45309"/>
+              <text x="235" y="103" font-size="16" fill="#1f2937">(t, f(t))</text>
+              <text x="420" y="246" font-size="16" fill="#1f2937">(t+Δt, f(t+Δt))</text>
+              <text x="430" y="155" font-size="18" fill="#be123c">切線</text>
+              <text x="470" y="218" font-size="18" fill="#b45309">割線</text>
+            </svg>
+            <p>平均變化率是割線斜率；當 \(\Delta t\to0\)，割線逼近切線，得到瞬間變化率。</p>
+          </div>
+          <div class="panel">
+            <h3>可微、連續、極限的關係</h3>
+            <ul>
+              <li>可微 \(\Rightarrow\) 連續。</li>
+              <li>連續 \(\Rightarrow\) 極限存在且等於函數值。</li>
+              <li>但連續不一定可微，例如尖角處可能連續但沒有唯一切線斜率。</li>
+              <li>極限存在也不一定連續，因為函數值可能不存在或不等於極限值。</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="formulas">
+      <div class="container">
+        <h2>公式總表</h2>
+        <div class="panel">
+          <table>
+            <thead><tr><th>類型</th><th>公式</th><th>使用時機與陷阱</th></tr></thead>
+            <tbody>
+              <tr><td>導數定義</td><td>\(f'(x)=\lim_{\Delta x\to0}\frac{f(x+\Delta x)-f(x)}{\Delta x}\)</td><td>用於從定義求導、理解瞬間變化率。</td></tr>
+              <tr><td>一點導數</td><td>\(f'(a)=\lim_{x\to a}\frac{f(x)-f(a)}{x-a}\)</td><td>題目指定求 \(f'(a)\) 時很常用。</td></tr>
+              <tr><td>冪次</td><td>\(\frac{d}{dx}(ax^n)=anx^{n-1}\)</td><td>根號與分母先改寫成分數次方/負次方。</td></tr>
+              <tr><td>常數</td><td>\(\frac{d}{dx}c=0\)</td><td>常數項微分後消失。</td></tr>
+              <tr><td>加減</td><td>\((f\pm g)'=f'\pm g'\)</td><td>可先加減再微分，也可各自微分再加減。</td></tr>
+              <tr><td>常數倍</td><td>\((af)'=af'\)</td><td>常數可先提出。</td></tr>
+              <tr><td>乘法</td><td>\((fg)'=f'g+fg'\)</td><td>不是 \(f'g'\)。記「前微後不微 + 前不微後微」。</td></tr>
+              <tr><td>商數</td><td>\(\left(\frac{f}{g}\right)'=\frac{f'g-fg'}{g^2}\)</td><td>分母平方不可漏；順序與負號不可反。</td></tr>
+              <tr><td>連鎖律</td><td>\((f\circ g)'(x)=f'(g(x))g'(x)\)</td><td>先微外，再微內；多層合成就一層一層乘。</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section id="chain">
+      <div class="container">
+        <h2>連鎖律專區</h2>
+        <div class="grid">
+          <div class="panel">
+            <h3>標準流程</h3>
+            <ol>
+              <li>先找最外層函數：例如 \((x^2+10)^{10}\) 的外層是 \(u^{10}\)。</li>
+              <li>保留內層，微外層：\(10u^9\)。</li>
+              <li>再微內層：\(u=x^2+10\)，所以 \(u'=2x\)。</li>
+              <li>相乘：\(10(x^2+10)^9\cdot2x\)。</li>
+            </ol>
+          </div>
+          <div class="panel">
+            <h3>講義例題</h3>
+            <div class="formula">\[
+              \frac{d}{dx}\left[(x^2+10)^{10}+3\right]
+              =20x(x^2+10)^9
+            \]</div>
+            <div class="formula">\[
+              \frac{d}{dx}\sqrt[3]{2x^2+x}
+              =\frac13(2x^2+x)^{-2/3}(4x+1)
+            \]</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="flashcards">
+      <div class="container">
+        <h2>互動重點卡</h2>
+        <p>點卡片翻面複習。</p>
+        <div class="flash-wrap" id="flashWrap"></div>
+      </div>
+    </section>
+
+    <section id="quiz">
+      <div class="container">
+        <div class="quiz-head">
+          <div>
+            <h2>第三堂階段測驗</h2>
+            <p>共 20 題：觀念題、公式辨識、計算題混合。交卷後會顯示正解與詳解。</p>
+          </div>
+          <div>
+            <div class="progress" aria-label="作答進度"><div class="bar" id="progressBar"></div></div>
+            <p id="progressText" style="margin:6px 0 0;color:var(--muted);font-weight:800">已作答 0 / 20</p>
+          </div>
+        </div>
+        <div id="scoreBox" class="score"></div>
+        <div id="quizList"></div>
+        <div class="actions">
+          <button class="button" id="submitBtn" type="button">交卷計分</button>
+          <button class="button secondary" id="resetBtn" type="button">重作測驗</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const flashcards = [
+      ["連續性三條件", "\\(f(a)\\) 存在、\\(\\lim_{x\\to a}f(x)\\) 存在、兩者相等。"],
+      ["導數的圖形意義", "曲線在該點的切線斜率，也可視為瞬間變化率。"],
+      ["乘法法則口訣", "前微後不微 + 前不微後微。"],
+      ["商數法則口訣", "上微下不微 - 上不微下微，除以下平方。"],
+      ["連鎖律口訣", "先微外面，再微裡面。"],
+      ["考試作答提醒", "商數法則答案通常可不完全化簡，但法則、括號、正負號要正確。"]
+    ];
+
+    const questions = [
+      { type: "觀念", q: "函數在 \\(x=a\\) 連續需要哪三件事同時成立？", options: ["\\(f(a)\\) 存在、極限存在、極限等於函數值", "只要 \\(f(a)\\) 存在", "只要左右極限不相等", "只要圖形有空心圈"], answer: 0, explain: "連續的三條件缺一不可。" },
+      { type: "觀念", q: "若 \\(\\lim_{x\\to a}f(x)\\) 存在但不等於 \\(f(a)\\)，則在 \\(a\\)？", options: ["不連續", "一定可微", "一定沒有極限", "一定沒有函數值"], answer: 0, explain: "極限值與函數值不相等，第三條件失敗。" },
+      { type: "觀念", q: "導數 \\(f'(a)\\) 的幾何意義是？", options: ["曲線在 \\((a,f(a))\\) 的切線斜率", "曲線下面積", "函數最大值", "函數的週期"], answer: 0, explain: "導數代表切線斜率，也是瞬間變化率。" },
+      { type: "公式", q: "哪一個是一點導數的定義？", options: ["\\(f'(a)=\\lim_{x\\to a}\\frac{f(x)-f(a)}{x-a}\\)", "\\(f'(a)=f(a)+a\\)", "\\(f'(a)=\\lim_{x\\to a}\\frac{x-a}{f(x)-f(a)}\\)", "\\(f'(a)=\\int_a^x f(t)dt\\)"], answer: 0, explain: "這是講義中用來求指定點導數的寫法。" },
+      { type: "計算", q: "\\(\\frac{d}{dx}(5x^3-2x^2+7)\\) 為何？", options: ["\\(15x^2-4x\\)", "\\(15x^2-2x\\)", "\\(5x^2-4x+7\\)", "\\(15x^3-4x^2\\)"], answer: 0, explain: "逐項用冪次法則，常數 7 微分為 0。" },
+      { type: "計算", q: "\\(\\frac{d}{dx}\\left(\\frac1{\\sqrt{x}}\\right)\\) 為何？", options: ["\\(-\\frac12x^{-3/2}\\)", "\\(\\frac12x^{-1/2}\\)", "\\(-\\frac32x^{-1/2}\\)", "\\(x^{-1/2}\\)"], answer: 0, explain: "\\(1/\\sqrt{x}=x^{-1/2}\\)，導數為 \\(-\\frac12x^{-3/2}\\)。" },
+      { type: "計算", q: "\\(\\frac{d}{dx}(3x^{-2}-4x^{3/2})\\) 為何？", options: ["\\(-6x^{-3}-6x^{1/2}\\)", "\\(6x^{-1}-6x^{1/2}\\)", "\\(-6x^{-3}+6x^{1/2}\\)", "\\(3x^{-3}-4x^{1/2}\\)"], answer: 0, explain: "第一項：\\(3(-2)x^{-3}\\)；第二項：\\(-4\\cdot\\frac32x^{1/2}\\)。" },
+      { type: "觀念", q: "乘法法則 \\((fg)'\\) 正確公式是？", options: ["\\(f'g+fg'\\)", "\\(f'g'\\)", "\\(f'g-fg'\\)", "\\(\\frac{f'g-fg'}{g^2}\\)"], answer: 0, explain: "口訣：前微後不微 + 前不微後微。" },
+      { type: "計算", q: "若 \\(f(x)=(x^2+x)(x+1)\\)，則 \\(f'(x)\\) 為何？", options: ["\\(3x^2+4x+1\\)", "\\(2x+1\\)", "\\(3x^2+2x\\)", "\\(x^3+2x^2+x\\)"], answer: 0, explain: "可用乘法法則或先展開，導數皆為 \\(3x^2+4x+1\\)。" },
+      { type: "觀念", q: "商數法則分母最後是？", options: ["\\([g(x)]^2\\)", "\\(g'(x)\\)", "\\(f(x)^2\\)", "\\(f'(x)g'(x)\\)"], answer: 0, explain: "商數法則：\\((f/g)'=(f'g-fg')/g^2\\)。" },
+      { type: "計算", q: "\\(\\frac{d}{dx}\\left(\\frac{x^2-3x+1}{2+3x}\\right)\\) 可寫成？", options: ["\\(\\frac{(2x-3)(2+3x)-3(x^2-3x+1)}{(2+3x)^2}\\)", "\\(\\frac{(2x-3)}{3}\\)", "\\(\\frac{(2x-3)(2+3x)+3(x^2-3x+1)}{2+3x}\\)", "\\(\\frac{(x^2-3x+1)(2+3x)}{(2+3x)^2}\\)"], answer: 0, explain: "上微下不微 - 上不微下微，除以下平方。" },
+      { type: "觀念", q: "連鎖律最貼近老師口訣的是？", options: ["先微外面，再微裡面", "只微裡面，不微外面", "分子分母同時平方", "先積分再微分"], answer: 0, explain: "錄音中反覆用「先微外面，再微裡面」說明連鎖律。" },
+      { type: "公式", q: "\\((f\\circ g)'(x)\\) 等於？", options: ["\\(f'(g(x))g'(x)\\)", "\\(f'(x)g'(x)\\)", "\\(f(g'(x))\\)", "\\(f'(g'(x))\\)"], answer: 0, explain: "外層函數在內層值處微分，再乘內層導數。" },
+      { type: "計算", q: "\\(\\frac{d}{dx}[(x^2+10)^{10}+3]\\) 為何？", options: ["\\(20x(x^2+10)^9\\)", "\\(10(x^2+10)^9\\)", "\\((x^2+10)^9+3\\)", "\\(20x(x^2+10)^{10}\\)"], answer: 0, explain: "外層 \\(u^{10}\\) 微成 \\(10u^9\\)，內層 \\(x^2+10\\) 微成 \\(2x\\)。" },
+      { type: "計算", q: "\\(h(x)=\\sqrt[3]{2x^2+x}\\)，\\(h'(x)\\) 為何？", options: ["\\(\\frac13(2x^2+x)^{-2/3}(4x+1)\\)", "\\(3(2x^2+x)^2(4x+1)\\)", "\\(\\frac13(2x^2+x)^{-2/3}\\)", "\\((2x^2+x)^{1/3}(4x+1)\\)"], answer: 0, explain: "先把三次根號寫成 \\((2x^2+x)^{1/3}\\)，再用連鎖律。" },
+      { type: "計算", q: "若 \\(f(x)=\\frac{x^4-3x^3+5x}{x^6-2x^3+6x-4}\\)，則 \\(f(0)\\) 為？", options: ["0", "-4", "\\(-5/4\\)", "不存在"], answer: 0, explain: "分子代 0 得 0，分母代 0 得 -4，所以 \\(f(0)=0\\)。" },
+      { type: "計算", q: "同上題，講義第 28 頁算得 \\(f'(0)\\) 為？", options: ["\\(-5/4\\)", "\\(5/4\\)", "0", "不存在"], answer: 0, explain: "定義法與商數法皆得到 \\(-5/4\\)。" },
+      { type: "觀念", q: "商數法則考試作答提醒何者正確？", options: ["可不完全化簡，但公式結構要正確", "一定要展開到最簡，否則全錯", "分母不用平方", "負號順序不重要"], answer: 0, explain: "講義紅字提醒答案不用化簡也可以，但不可漏平方與負號。" },
+      { type: "觀念", q: "可微與連續的關係何者正確？", options: ["可微一定連續；連續不一定可微", "連續一定可微", "可微一定不連續", "兩者完全無關"], answer: 0, explain: "可微比連續更強，尖角可連續但不可微。" },
+      { type: "觀念", q: "第一段錄音中三角函數回顧在本頁如何處理最合適？", options: ["作為前情回顧，ASR 不穩處不當新公式", "全部當成新公式背誦", "完全忽略錄音來源", "改寫成物理公式"], answer: 0, explain: "技能要求標註不確定；ASR 不穩的三角函數片段只保留可核對脈絡。" }
+    ];
+
+    const flashWrap = document.getElementById("flashWrap");
+    flashWrap.innerHTML = flashcards.map(([front, back]) => `
+      <article class="flashcard" tabindex="0">
+        <div class="front"><span class="tag">正面</span><h3>${front}</h3><p>點一下看答案</p></div>
+        <div class="back"><span class="tag ok">背面</span><p>${back}</p></div>
+      </article>
+    `).join("");
+    flashWrap.querySelectorAll(".flashcard").forEach(card => {
+      card.addEventListener("click", () => card.classList.toggle("flipped"));
+      card.addEventListener("keydown", event => {
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault();
+          card.classList.toggle("flipped");
+        }
+      });
+    });
+
+    const quizList = document.getElementById("quizList");
+    const progressBar = document.getElementById("progressBar");
+    const progressText = document.getElementById("progressText");
+    const scoreBox = document.getElementById("scoreBox");
+    const submitBtn = document.getElementById("submitBtn");
+    const resetBtn = document.getElementById("resetBtn");
+
+    function renderQuiz() {
+      quizList.innerHTML = questions.map((item, index) => {
+        const opts = item.options.map((option, optIndex) => `
+          <label class="option" data-question="${index}" data-option="${optIndex}">
+            <input type="radio" name="q${index}" value="${optIndex}" />
+            <span>${option}</span>
+          </label>
+        `).join("");
+        return `
+          <article class="quiz-card" id="card-${index}">
+            <div class="question-title">
+              <span class="tag ${item.type === "計算" ? "ok" : item.type === "公式" ? "warn" : ""}">${item.type}</span>
+              <span>${index + 1}. ${item.q}</span>
+            </div>
+            <div class="options">${opts}</div>
+            <div class="explanation" id="explain-${index}">${item.explain}</div>
+          </article>
+        `;
+      }).join("");
+      quizList.querySelectorAll("input").forEach(input => input.addEventListener("change", updateProgress));
+      if (window.MathJax?.typesetPromise) window.MathJax.typesetPromise([quizList, flashWrap]);
+      updateProgress();
+    }
+
+    function getSelected(index) {
+      const checked = document.querySelector(`input[name="q${index}"]:checked`);
+      return checked ? Number(checked.value) : null;
+    }
+
+    function updateProgress() {
+      const answered = questions.reduce((sum, _, index) => sum + (getSelected(index) !== null ? 1 : 0), 0);
+      const pct = Math.round((answered / questions.length) * 100);
+      progressBar.style.width = `${pct}%`;
+      progressText.textContent = `已作答 ${answered} / ${questions.length}`;
+    }
+
+    function submitQuiz() {
+      let score = 0;
+      questions.forEach((item, index) => {
+        const selected = getSelected(index);
+        if (selected === item.answer) score += 1;
+        document.querySelectorAll(`[data-question="${index}"]`).forEach(label => {
+          const opt = Number(label.dataset.option);
+          label.classList.toggle("correct", opt === item.answer);
+          label.classList.toggle("wrong", selected === opt && opt !== item.answer);
+        });
+        document.getElementById(`explain-${index}`).style.display = "block";
+      });
+      scoreBox.style.display = "block";
+      scoreBox.textContent = `得分：${score} / ${questions.length}。${score >= 17 ? "連續性、導數與微分規則掌握得很穩。" : "建議回頭補連續性三條件、商數法則與連鎖律口訣。"}`;
+      if (window.MathJax?.typesetPromise) window.MathJax.typesetPromise([quizList, scoreBox]);
+    }
+
+    function resetQuiz() {
+      document.querySelectorAll("input[type='radio']").forEach(input => { input.checked = false; });
+      document.querySelectorAll(".option").forEach(label => label.classList.remove("correct", "wrong"));
+      document.querySelectorAll(".explanation").forEach(explain => { explain.style.display = "none"; });
+      scoreBox.style.display = "none";
+      scoreBox.textContent = "";
+      updateProgress();
+      document.getElementById("quiz").scrollIntoView({ behavior: "smooth" });
+    }
+
+    submitBtn.addEventListener("click", submitQuiz);
+    resetBtn.addEventListener("click", resetQuiz);
+    renderQuiz();
+  </script>
+</body>
+</html>

@@ -59,6 +59,25 @@ https://mars727-hub.github.io/summer-physics-calculus-notes/calculus_trig_limits
 - 逐條驗證與待查證/相斥提醒
 - 互動式階段複習測驗
 
+### 微積分第 3 堂：連續性、導數與微分法則
+
+頁面：
+
+https://mars727-hub.github.io/summer-physics-calculus-notes/calculus_derivatives_study.html
+
+主題包含：
+
+- 極限例題技巧回顧
+- 連續性三條件
+- 平均變化率與瞬間變化率
+- 導數定義與切線斜率
+- 切線方程式
+- 冪次微分推導與二項式工具
+- 加減法、常數倍、乘法、商數微分法則
+- 連鎖律與合成函數微分
+- 老師強調、星號與考試提醒標註
+- 互動重點卡與階段複習測驗
+
 ## 使用方式
 
 直接打開網站首頁，選擇要複習的科目即可。
@@ -115,6 +134,7 @@ https://mars727-hub.github.io/summer-physics-calculus-notes/calculus_trig_limits
 ├── physics_kinematics_study.html
 ├── calculus_functions_study.html
 ├── calculus_trig_limits_study.html
+├── calculus_derivatives_study.html
 ├── .gitignore
 └── README.md
 ```
