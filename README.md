@@ -6,6 +6,20 @@
 
 https://mars727-hub.github.io/summer-physics-calculus-notes/
 
+## 微積分第 4 堂：指對數與三角函數微分
+
+線上頁面：
+https://mars727-hub.github.io/summer-physics-calculus-notes/calculus_exp_log_trig_derivatives_study.html
+
+內容範圍：
+- 第四堂講義第 2–12 頁與三支完整課程影片
+- 指數函數、對數函數與六個三角函數的導數
+- 三角基本極限、夾擠定理與導數推導
+- 乘法法則、商法則與多層連鎖律
+- 老師明確說明的考試形式、星號重點與常見失分處
+- 逐頁導讀、公式翻卡、20 題互動測驗與詳解
+- 公式、定義域與推導嚴格性的逐條查證標籤
+
 ## 內容
 
 ### 普通物理
@@ -135,6 +149,7 @@ https://mars727-hub.github.io/summer-physics-calculus-notes/calculus_derivatives
 ├── calculus_functions_study.html
 ├── calculus_trig_limits_study.html
 ├── calculus_derivatives_study.html
+├── calculus_exp_log_trig_derivatives_study.html
 ├── .gitignore
 └── README.md
 ```

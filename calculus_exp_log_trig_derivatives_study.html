@@ -1,0 +1,947 @@
+<!doctype html>
+<html lang="zh-Hant-TW">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>微積分第 4 堂｜指對數與三角函數微分</title>
+  <script>
+    window.MathJax = {
+      tex: { inlineMath: [["\\(", "\\)"], ["$", "$"]], displayMath: [["\\[", "\\]"]] },
+      svg: { fontCache: "global" }
+    };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+  <style>
+    :root {
+      --ink: #17202a;
+      --muted: #667085;
+      --paper: #fffaf2;
+      --surface: #ffffff;
+      --line: #d6dce5;
+      --teal: #0f766e;
+      --teal-soft: #e5f5f2;
+      --indigo: #3730a3;
+      --indigo-soft: #ecebff;
+      --amber: #a94f08;
+      --amber-soft: #fff0d2;
+      --rose: #be123c;
+      --rose-soft: #ffe4e6;
+      --green: #15803d;
+      --green-soft: #e8f7eb;
+      --shadow: 0 16px 42px rgba(23, 32, 42, 0.11);
+      --radius: 8px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: var(--paper);
+      font-family: "Noto Sans TC", "Microsoft JhengHei", "PingFang TC", system-ui, sans-serif;
+      line-height: 1.75;
+      overflow-x: hidden;
+    }
+
+    a { color: inherit; }
+    button, input { font: inherit; }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 30;
+      border-bottom: 1px solid rgba(23, 32, 42, 0.12);
+      background: rgba(255, 250, 242, 0.95);
+      backdrop-filter: blur(12px);
+    }
+
+    .nav {
+      width: min(1180px, calc(100% - 32px));
+      min-height: 64px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    .mark {
+      width: 36px;
+      height: 36px;
+      display: grid;
+      place-items: center;
+      border-radius: var(--radius);
+      background: var(--ink);
+      color: #fff;
+      font-family: Georgia, serif;
+      font-size: 18px;
+    }
+
+    .navlinks {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      gap: 6px;
+    }
+
+    .navlinks a {
+      min-height: 36px;
+      padding: 6px 10px;
+      border: 1px solid transparent;
+      border-radius: var(--radius);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 800;
+    }
+
+    .navlinks a:hover { border-color: var(--line); background: #fff; }
+
+    .hero {
+      min-height: 78vh;
+      display: grid;
+      align-items: center;
+      padding: 76px 0 58px;
+      border-bottom: 1px solid rgba(23, 32, 42, 0.08);
+      background-color: #f7efe2;
+      background-image:
+        linear-gradient(rgba(255,255,255,.62) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.62) 1px, transparent 1px);
+      background-size: 32px 32px;
+    }
+
+    .container {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+
+    .kicker {
+      margin: 0 0 12px;
+      color: var(--teal);
+      font-size: 15px;
+      font-weight: 900;
+    }
+
+    h1 {
+      max-width: 980px;
+      margin: 0;
+      font-size: clamp(38px, 7vw, 72px);
+      line-height: 1.06;
+      letter-spacing: 0;
+    }
+
+    .lead {
+      max-width: 890px;
+      margin: 22px 0 0;
+      color: #344054;
+      font-size: clamp(17px, 2vw, 21px);
+    }
+
+    .hero-formulas {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 28px;
+    }
+
+    .formula-chip {
+      min-height: 40px;
+      display: inline-flex;
+      align-items: center;
+      padding: 7px 12px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(255,255,255,.92);
+      box-shadow: 0 8px 20px rgba(23,32,42,.07);
+      font-weight: 800;
+    }
+
+    .hero-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 26px; }
+
+    .button {
+      min-height: 44px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 16px;
+      border: 1px solid var(--ink);
+      border-radius: var(--radius);
+      background: var(--ink);
+      color: #fff;
+      text-decoration: none;
+      font-weight: 900;
+      cursor: pointer;
+    }
+
+    .button.secondary { background: #fff; color: var(--ink); }
+    .button:focus-visible, .option:focus-within, summary:focus-visible, .flashcard:focus-visible {
+      outline: 3px solid rgba(55,48,163,.35);
+      outline-offset: 3px;
+    }
+
+    main section {
+      padding: 56px 0;
+      border-top: 1px solid rgba(23, 32, 42, 0.08);
+    }
+
+    h2 {
+      margin: 0 0 14px;
+      font-size: clamp(28px, 4vw, 44px);
+      line-height: 1.15;
+      letter-spacing: 0;
+    }
+
+    h3 { margin: 0 0 10px; font-size: 22px; line-height: 1.3; letter-spacing: 0; }
+    h4 { margin: 0 0 8px; font-size: 17px; letter-spacing: 0; }
+    p { margin: 0 0 12px; }
+    ul, ol { margin-top: 8px; padding-left: 1.35rem; }
+    li + li { margin-top: 6px; }
+
+    .section-intro { max-width: 850px; color: var(--muted); }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+      align-items: start;
+    }
+
+    .three { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .grid > *, .formula-grid > *, .flash-grid > * { min-width: 0; }
+
+    .panel, .quiz-card, .flashcard, details.page-guide {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--surface);
+      box-shadow: var(--shadow);
+    }
+
+    .panel { padding: 22px; }
+    .panel mjx-container[display="true"] {
+      max-width: 100%;
+      overflow-x: auto;
+      overflow-y: hidden;
+      padding-bottom: 4px;
+    }
+
+    .note {
+      padding: 16px 18px;
+      border-left: 5px solid var(--amber);
+      border-radius: 0 var(--radius) var(--radius) 0;
+      background: var(--amber-soft);
+      color: #57320b;
+    }
+
+    .note.emphasis { border-left-color: var(--rose); background: var(--rose-soft); color: #71132a; }
+    .note.verified { border-left-color: var(--teal); background: var(--teal-soft); color: #134e4a; }
+    .note.conflict { border-left-color: var(--indigo); background: var(--indigo-soft); color: #312e81; }
+
+    .tag {
+      min-height: 28px;
+      display: inline-flex;
+      align-items: center;
+      width: fit-content;
+      padding: 0 9px;
+      border-radius: 999px;
+      background: var(--indigo-soft);
+      color: var(--indigo);
+      font-size: 13px;
+      font-weight: 900;
+      vertical-align: middle;
+    }
+
+    .tag.hot { background: var(--rose-soft); color: var(--rose); }
+    .tag.ok { background: var(--teal-soft); color: var(--teal); }
+    .tag.warn { background: var(--amber-soft); color: var(--amber); }
+
+    .timeline { display: grid; gap: 12px; margin-top: 18px; }
+    .timeline-item {
+      display: grid;
+      grid-template-columns: 138px minmax(0, 1fr);
+      gap: 16px;
+      padding: 16px 0;
+      border-bottom: 1px solid var(--line);
+    }
+    .timeline-item:last-child { border-bottom: 0; }
+    .time { color: var(--teal); font-weight: 900; }
+
+    .page-list { display: grid; gap: 12px; margin-top: 20px; }
+    details.page-guide { overflow: hidden; }
+    details.page-guide summary {
+      min-height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 16px 18px;
+      cursor: pointer;
+      list-style: none;
+      font-weight: 900;
+    }
+    details.page-guide summary::-webkit-details-marker { display: none; }
+    details.page-guide summary::after { content: "+"; font-size: 23px; color: var(--teal); }
+    details.page-guide[open] summary::after { content: "−"; }
+    .page-body { padding: 0 18px 18px; border-top: 1px solid var(--line); }
+    .page-body .grid { margin-top: 16px; }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: #fff;
+    }
+    th, td { padding: 12px; border: 1px solid var(--line); text-align: left; vertical-align: top; }
+    th { background: #f3f5f8; font-weight: 900; }
+    .table-wrap {
+      width: 100%;
+      max-width: 100%;
+      overflow-x: auto;
+      border-radius: var(--radius);
+      contain: inline-size;
+    }
+
+    .steps { counter-reset: step; display: grid; gap: 12px; margin-top: 16px; }
+    .step {
+      position: relative;
+      min-height: 54px;
+      padding: 13px 14px 13px 58px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fff;
+    }
+    .step::before {
+      counter-increment: step;
+      content: counter(step);
+      position: absolute;
+      left: 14px;
+      top: 12px;
+      width: 30px;
+      height: 30px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      background: var(--ink);
+      color: #fff;
+      font-weight: 900;
+    }
+
+    .nesting {
+      display: grid;
+      place-items: center;
+      min-height: 310px;
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #f8fafc;
+    }
+    .layer { width: 100%; padding: 22px; border: 3px solid var(--rose); background: var(--rose-soft); }
+    .layer .layer { border-color: var(--indigo); background: var(--indigo-soft); }
+    .layer .layer .layer { border-color: var(--teal); background: var(--teal-soft); }
+    .layer-label { display: block; margin-bottom: 8px; font-weight: 900; }
+
+    .visual {
+      min-height: 350px;
+      display: grid;
+      place-items: center;
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fff;
+    }
+    .visual svg { width: min(100%, 560px); height: auto; }
+    .visual text { font-family: "Microsoft JhengHei", sans-serif; fill: var(--ink); }
+
+    .formula-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+    .formula-row { padding: 14px; border: 1px solid var(--line); border-radius: var(--radius); background: #fff; }
+    .formula-row strong { display: block; color: var(--teal); }
+
+    .flash-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+    .flashcard {
+      min-height: 190px;
+      display: grid;
+      place-items: center;
+      padding: 20px;
+      text-align: center;
+      cursor: pointer;
+      user-select: none;
+    }
+    .flashcard .back { display: none; }
+    .flashcard.flipped { background: var(--teal-soft); border-color: var(--teal); }
+    .flashcard.flipped .front { display: none; }
+    .flashcard.flipped .back { display: block; }
+    .flash-label { display: block; margin-bottom: 8px; color: var(--muted); font-size: 13px; font-weight: 900; }
+
+    .quiz-toolbar {
+      position: sticky;
+      top: 70px;
+      z-index: 15;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin: 18px 0;
+      padding: 12px 14px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(255,255,255,.96);
+      box-shadow: 0 10px 28px rgba(23,32,42,.09);
+    }
+    .progress-track { width: min(360px, 46vw); height: 10px; overflow: hidden; border-radius: 999px; background: #e4e7ec; }
+    .progress-bar { width: 0; height: 100%; background: var(--teal); transition: width .2s ease; }
+    .quiz-list { display: grid; gap: 16px; }
+    .quiz-card { padding: 20px; }
+    .quiz-card.correct { border-color: var(--green); background: var(--green-soft); }
+    .quiz-card.wrong { border-color: var(--rose); background: #fff5f6; }
+    .question-title { margin: 0 0 12px; font-weight: 900; }
+    .options { display: grid; gap: 8px; }
+    .option {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      padding: 10px 12px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fff;
+      cursor: pointer;
+    }
+    .option:hover { border-color: var(--teal); }
+    .explanation { display: none; margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--line); }
+    .quiz-card.graded .explanation { display: block; }
+    .result {
+      display: none;
+      margin-top: 18px;
+      padding: 20px;
+      border-left: 6px solid var(--teal);
+      background: var(--teal-soft);
+      font-size: 18px;
+      font-weight: 900;
+    }
+    .result.show { display: block; }
+
+    footer { padding: 34px 0 46px; border-top: 1px solid var(--line); color: var(--muted); }
+
+    @media (max-width: 900px) {
+      .three, .flash-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .timeline-item { grid-template-columns: 1fr; gap: 4px; }
+    }
+
+    @media (max-width: 720px) {
+      .nav { align-items: flex-start; padding: 12px 0; }
+      .navlinks { display: none; }
+      .grid, .three, .formula-grid, .flash-grid { grid-template-columns: 1fr; }
+      .hero { min-height: 72vh; padding-top: 54px; }
+      .table-wrap table { table-layout: fixed; }
+      .table-wrap th, .table-wrap td { overflow-wrap: anywhere; }
+      .table-wrap mjx-container { max-width: 100%; overflow-x: auto; overflow-y: hidden; }
+      .panel p, .step, .table-wrap td, .option, .explanation {
+        max-width: 100%;
+        overflow-x: auto;
+        overflow-y: hidden;
+      }
+      .quiz-toolbar { align-items: flex-start; flex-direction: column; }
+      .progress-track { width: 100%; }
+      details.page-guide summary { align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <nav class="nav" aria-label="本頁導覽">
+      <a class="brand" href="index.html"><span class="mark">d/dx</span><span>第四堂微積分</span></a>
+      <div class="navlinks">
+        <a href="#map">學習地圖</a>
+        <a href="#pages">逐頁導讀</a>
+        <a href="#formulas">公式整合</a>
+        <a href="#trig">三角推導</a>
+        <a href="#practice">翻卡</a>
+        <a href="#quiz">測驗</a>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="container">
+        <p class="kicker">微積分第 4 堂｜講義第 2–12 頁＋三支完整課程影片</p>
+        <h1>指對數與三角函數微分</h1>
+        <p class="lead">
+          從導數定義出發，建立指數、對數與六個三角函數的導數公式；再把乘法、商法則與連鎖律組合成可直接解題的流程。內容整合講義板書、課堂口頭提醒與公式查證。
+        </p>
+        <div class="hero-formulas" aria-label="本堂核心公式">
+          <span class="formula-chip">\(\dfrac{d}{dx}e^x=e^x\)</span>
+          <span class="formula-chip">\(\dfrac{d}{dx}\ln|u|=\dfrac{u'}{u}\)</span>
+          <span class="formula-chip">\((\sin x)'=\cos x\)</span>
+          <span class="formula-chip">\((f\circ g)'=f'(g)g'\)</span>
+        </div>
+        <div class="hero-actions">
+          <a class="button" href="#map">開始複習</a>
+          <a class="button secondary" href="#quiz">直接測驗</a>
+        </div>
+      </div>
+    </section>
+
+    <section id="map">
+      <div class="container">
+        <p class="kicker">Learning map</p>
+        <h2>本堂學習地圖</h2>
+        <p class="section-intro">建議依序複習。每一步都以前一步的公式為工具，最後在綜合題中同時判斷外層、內層與乘法結構。</p>
+        <div class="grid three" style="margin-top:20px">
+          <article class="panel">
+            <span class="tag">1｜來源</span>
+            <h3>指數與對數</h3>
+            <p>從 \(e^x\) 與 \(\ln x\) 的導數，推出一般底數 \(a^x\)、\(\log_a x\) 與複合函數版本。</p>
+          </article>
+          <article class="panel">
+            <span class="tag">2｜工具</span>
+            <h3>公式地圖</h3>
+            <p>把冪次、乘法、商法則與連鎖律整理成選擇流程，先辨認最外層，再逐層向內微分。</p>
+          </article>
+          <article class="panel">
+            <span class="tag">3｜推導</span>
+            <h3>三角函數</h3>
+            <p>用弧度制基本極限推出 \(\sin x\)、\(\cos x\) 導數，再導出其餘四個公式。</p>
+          </article>
+          <article class="panel">
+            <span class="tag">4｜組合</span>
+            <h3>多層連鎖律</h3>
+            <p>處理 \(\sec(x^3)\)、\(\csc^3(1/x)\) 等二層、三層函數。</p>
+          </article>
+          <article class="panel">
+            <span class="tag hot">5｜考題型</span>
+            <h3>對數微分</h3>
+            <p>把 \((\tan x)^{\sin x}\) 改寫成以 \(e\) 為底，再搭配乘法法則與連鎖律。</p>
+          </article>
+          <article class="panel">
+            <span class="tag ok">6｜驗收</span>
+            <h3>翻卡與測驗</h3>
+            <p>先用公式翻卡建立反射，再完成 20 題互動測驗並逐題閱讀詳解。</p>
+          </article>
+        </div>
+
+        <div class="grid" style="margin-top:20px">
+          <div class="note emphasis">
+            <strong>必考／老師明確說明：</strong>考題以講義空白處、上課練習與作業型計算為主；公式推導主要用來理解脈絡，不是本堂主要考法。計算時要寫出正確導數符號，不能把原函數直接寫成等於導數。
+          </div>
+          <div class="note verified">
+            <strong>查證結果：</strong>核心公式與標準大一微積分一致。已補上弧度制、定義域及 \(u(x)\neq0\) 等條件；講義中較直觀的極限交換步驟另列嚴格性提醒。
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="emphasis">
+      <div class="container">
+        <p class="kicker">Instructor emphasis</p>
+        <h2>老師強調與考試策略</h2>
+        <div class="panel timeline">
+          <div class="timeline-item"><div class="time">影片 4.1｜00:00</div><div><strong>連鎖律很重要：</strong>口訣是「先微外面，再微裡面」，是本堂主要計算技巧。</div></div>
+          <div class="timeline-item"><div class="time">影片 4.2｜14:28</div><div><strong>一定要知道：</strong>基本微分公式；常見錯誤是商法則漏負號、漏分母平方，以及連鎖律找錯最外層。</div></div>
+          <div class="timeline-item"><div class="time">影片 4.2｜19:45</div><div><strong>要形成直覺：</strong>看到六個三角函數就要能立即反應導數；其中 \(\sin\) 與 \(\cos\) 最少一定要記得，其餘四個可由它們重建。</div></div>
+          <div class="timeline-item"><div class="time">影片 4.2｜57:41</div><div><strong>考試形式：</strong>以作業、講義空白計算題為主。推導要理解，但老師明確表示不太考完整推導。</div></div>
+          <div class="timeline-item"><div class="time">影片 4.3｜06:04</div><div><strong>作答格式會影響得分：</strong>應寫 \(f'(x)=\cdots\) 或 \(\dfrac{df}{dx}=\cdots\)，不能寫成 \(f(x)=\) 導數答案。</div></div>
+          <div class="timeline-item"><div class="time">影片 4.3｜28:37</div><div><strong>最重要的微分技巧：</strong>連鎖律；正確列式後不必冒險過度化簡，未化簡的正確答案可接受。</div></div>
+        </div>
+        <div class="note conflict" style="margin-top:18px">
+          <strong>需人工確認：</strong>影片 4.3 的 00:00–00:51 自動語音辨識出現重複片語。該段筆記只採用已目視核對的影片板書與 PDF 第 11 頁，不引用不穩定逐字內容。
+        </div>
+      </div>
+    </section>
+
+    <section id="pages">
+      <div class="container">
+        <p class="kicker">Page-by-page</p>
+        <h2>講義第 2–12 頁逐頁導讀</h2>
+        <p class="section-intro">每頁均已目視檢查，並與影片對應段落和標準公式交叉驗證。展開可查看學習目標、考試提醒與自我檢查。</p>
+        <div class="page-list">
+          <details class="page-guide" open>
+            <summary><span>第 2 頁｜\(e^x\) 與 \(a^x\) 的導數</span><span class="tag hot">講義星號</span></summary>
+            <div class="page-body"><div class="grid"><div><h4>核心</h4><p>由自然指數表示建立 \((e^x)'=e^x\)，再用 \(a^x=e^{x\ln a}\) 得 \((a^x)'=a^x\ln a\)。</p></div><div><h4>自我檢查</h4><p>為什麼只有底數 \(e\) 微分後不會多出常數係數？</p></div></div><div class="note conflict"><strong>驗證提醒：</strong>講義把微分移入極限作直觀推導；嚴格分析需先證明可交換。計算公式正確，但此步不宜視為完整嚴格證明。</div></div>
+          </details>
+          <details class="page-guide">
+            <summary><span>第 3 頁｜指數函數綜合例題</span><span class="tag hot">星號公式</span></summary>
+            <div class="page-body"><div class="grid"><div><h4>題型</h4><p>商法則 \(e^x/(x^2+3)\)、複合指數 \(10^{x^2}\)、變底變次 \(x^x\)。</p></div><div><h4>考點</h4><p>非 \(e\) 底要乘 \(\ln a\)；\(x^x\) 先改寫為 \(e^{x\ln x}\)。</p></div></div></div>
+          </details>
+          <details class="page-guide">
+            <summary><span>第 4 頁｜\(\ln x\)、\(\log_a x\) 與 \(\ln f(x)\)</span><span class="tag hot">講義星號</span></summary>
+            <div class="page-body"><div class="grid"><div><h4>核心</h4><p>\((\ln x)'=1/x\)、\((\log_a x)'=1/(x\ln a)\)、\((\ln f(x))'=f'(x)/f(x)\)。</p></div><div><h4>易錯</h4><p>分母是「原本內層函數」，分子是它的導數；不要漏掉連鎖律。</p></div></div></div>
+          </details>
+          <details class="page-guide">
+            <summary><span>第 5 頁｜對數微分例題 1–4</span><span class="tag warn">方法比較</span></summary>
+            <div class="page-body"><div class="grid"><div><h4>題型</h4><p>\(\ln(ax)\)、\(\ln(a+x)\)、\(\ln\frac{2+x}{3-x}\)、\(\log_3(x^2-1)\)。</p></div><div><h4>策略</h4><p>對數內若為商，可直接套連鎖律＋商法則，也可先用對數律拆成相減；後者通常較快。</p></div></div></div>
+          </details>
+          <details class="page-guide">
+            <summary><span>第 6 頁｜對數微分例題 5–8</span><span class="tag ok">連鎖整合</span></summary>
+            <div class="page-body"><div class="grid"><div><h4>題型</h4><p>\(x\ln x\)、\(\ln(x^2+3)\)、\(1/\ln x\)、\(1/\ln(x^2+3x)\)。</p></div><div><h4>考點</h4><p>先把倒數改成負一次方，可清楚看出冪次外層、對數中層與多項式內層。</p></div></div></div>
+          </details>
+          <details class="page-guide">
+            <summary><span>第 7 頁｜微分公式總整理</span><span class="tag hot">連鎖律圈選</span></summary>
+            <div class="page-body"><div class="grid"><div><h4>公式群</h4><p>常數、冪次、乘法、商法則、連鎖律、指數、對數與六個三角導數。</p></div><div><h4>老師提醒</h4><p>商法則最常漏「減號」與「分母平方」；連鎖律要先確認最外層函數。</p></div></div></div>
+          </details>
+          <details class="page-guide">
+            <summary><span>第 8 頁｜兩個三角基本極限</span><span class="tag hot">講義框選</span></summary>
+            <div class="page-body"><div class="grid"><div><h4>核心</h4><p>\(\lim_{x\to0}\sin x/x=1\) 由單位圓面積夾擠；第二極限以共軛與第一極限推出。</p></div><div><h4>必要條件</h4><p>角度必須採弧度制。用角度制時第一個極限不等於 1。</p></div></div></div>
+          </details>
+          <details class="page-guide">
+            <summary><span>第 9 頁｜\(\sin x\)、\(\cos x\)、\(\tan x\) 導數</span><span class="tag hot">板書星號</span></summary>
+            <div class="page-body"><div class="grid"><div><h4>推導</h4><p>導數定義＋和角公式＋兩個基本極限，得到 \((\sin x)'=\cos x\)、\((\cos x)'=-\sin x\)。</p></div><div><h4>延伸</h4><p>將 \(\tan x=\sin x/\cos x\) 套商法則，得到 \(\sec^2x\)。</p></div></div></div>
+          </details>
+          <details class="page-guide">
+            <summary><span>第 10 頁｜其餘三角導數與記號陷阱</span><span class="tag hot">雙星提醒</span></summary>
+            <div class="page-body"><div class="grid"><div><h4>公式</h4><p>\((\cot x)'=-\csc^2x\)、\((\sec x)'=\sec x\tan x\)、\((\csc x)'=-\csc x\cot x\)。</p></div><div><h4>記號</h4><p>\((\sin x)^{-1}=1/\sin x=\csc x\)，但 \(\sin^{-1}x\) 慣例表示反正弦 \(\arcsin x\)，兩者不同。</p></div></div></div>
+          </details>
+          <details class="page-guide">
+            <summary><span>第 11 頁｜三角函數連鎖律例題</span><span class="tag hot">考題型</span></summary>
+            <div class="page-body"><div class="grid"><div><h4>題型</h4><p>\(\sin(3x)\)、\(\cos^3x\)、\(\sec(x^3)\)、\(\csc^3(1/x)\)。</p></div><div><h4>自我檢查</h4><p>能否逐題標出每一層函數，並確認每一層都微分一次？</p></div></div></div>
+          </details>
+          <details class="page-guide">
+            <summary><span>第 12 頁｜全章綜合：對數與變底變次</span><span class="tag hot">考試會考</span></summary>
+            <div class="page-body"><div class="grid"><div><h4>題型</h4><p>\(\ln|\sec x+\tan x|\) 與 \((\tan x)^{\sin x}\)，整合對數、指數、乘法與三角微分。</p></div><div><h4>關鍵</h4><p>後者先改寫成 \(e^{\sin x\ln(\tan x)}\)，再對指數內部使用乘法法則。</p></div></div></div>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <section id="formulas">
+      <div class="container">
+        <p class="kicker">Formula toolkit</p>
+        <h2>公式整合與適用條件</h2>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>類型</th><th>公式</th><th>使用條件／易錯點</th></tr></thead>
+            <tbody>
+              <tr><td>自然指數</td><td>\(\dfrac{d}{dx}e^{u}=e^u u'\)</td><td>連鎖律的 \(u'\) 不能漏。</td></tr>
+              <tr><td>一般指數</td><td>\(\dfrac{d}{dx}a^{u}=a^u\ln(a)u'\)</td><td>\(a&gt;0,\ a\neq1\)。只有 \(a=e\) 時 \(\ln a=1\)。</td></tr>
+              <tr><td>自然對數</td><td>\(\dfrac{d}{dx}\ln|u|=\dfrac{u'}{u}\)</td><td>在 \(u\neq0\) 的區間成立；若寫 \(\ln u\)，另需 \(u&gt;0\)。</td></tr>
+              <tr><td>一般對數</td><td>\(\dfrac{d}{dx}\log_a u=\dfrac{u'}{u\ln a}\)</td><td>\(a&gt;0,\ a\neq1,\ u&gt;0\)。</td></tr>
+              <tr><td>乘法法則</td><td>\((uv)'=u'v+uv'\)</td><td>兩項相加，不是 \(u'v'\)。</td></tr>
+              <tr><td>商法則</td><td>\(\left(\dfrac{u}{v}\right)'=\dfrac{u'v-uv'}{v^2}\)</td><td>老師提醒：最常漏減號或分母平方。</td></tr>
+              <tr><td>連鎖律</td><td>\(\dfrac{d}{dx}f(g(x))=f'(g(x))g'(x)\)</td><td>由最外層開始，每一層都微分一次。</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="grid" style="margin-top:22px">
+          <article class="panel">
+            <h3>例 1：\(x^x\)</h3>
+            <div class="steps">
+              <div class="step">限制在 \(x&gt;0\)，改寫 \(x^x=e^{x\ln x}\)。</div>
+              <div class="step">外層微分：\(e^{x\ln x}\) 保留自己。</div>
+              <div class="step">內層用乘法法則：\((x\ln x)'=\ln x+1\)。</div>
+              <div class="step">所以 \(\boxed{(x^x)'=x^x(\ln x+1)}\)。</div>
+            </div>
+          </article>
+          <article class="panel">
+            <h3>例 2：\(\log_3(x^2-1)\)</h3>
+            <div class="steps">
+              <div class="step">套一般對數：分母先寫 \((x^2-1)\ln3\)。</div>
+              <div class="step">乘上內層導數 \((x^2-1)'=2x\)。</div>
+              <div class="step">\(\boxed{f'(x)=\dfrac{2x}{(x^2-1)\ln3}}\)。</div>
+              <div class="step">原函數定義域：\(x^2-1&gt;0\)，即 \(|x|&gt;1\)。</div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="chain">
+      <div class="container">
+        <p class="kicker">Chain rule</p>
+        <h2>多層連鎖律：從外往內拆</h2>
+        <div class="grid">
+          <div class="nesting" aria-label="csc 三次方的三層函數示意">
+            <div class="layer"><span class="layer-label">第 1 層：立方 \((\square)^3\)</span>
+              <div class="layer"><span class="layer-label">第 2 層：\(\csc(\square)\)</span>
+                <div class="layer"><span class="layer-label">第 3 層：\(1/x\)</span>最內層變數 \(x\)</div>
+              </div>
+            </div>
+          </div>
+          <article class="panel">
+            <h3>例：\(f(x)=\csc^3(1/x)\)</h3>
+            <div class="steps">
+              <div class="step">微外層立方：\(3\csc^2(1/x)\)。</div>
+              <div class="step">微中層 \(\csc u\)：\(-\csc u\cot u\)。</div>
+              <div class="step">微內層 \(1/x=x^{-1}\)：\(-x^{-2}\)。</div>
+              <div class="step">兩個負號相消，得到 \(\boxed{\dfrac{3}{x^2}\csc^3(1/x)\cot(1/x)}\)。</div>
+            </div>
+          </article>
+        </div>
+        <div class="note emphasis" style="margin-top:18px"><strong>老師反覆提醒：</strong>連鎖律不是只乘一次「裡面導數」。有幾層函數，就要逐層辨認；一開始可寫出中介變數，熟練後再縮短。</div>
+      </div>
+    </section>
+
+    <section id="trig">
+      <div class="container">
+        <p class="kicker">Trigonometric derivatives</p>
+        <h2>基本極限如何長成三角導數</h2>
+        <div class="grid">
+          <figure class="visual">
+            <svg viewBox="0 0 560 420" role="img" aria-labelledby="circle-title circle-desc">
+              <title id="circle-title">單位圓夾擠定理示意</title>
+              <desc id="circle-desc">內三角形、扇形與外三角形的面積關係，用來證明 sin x 除以 x 的極限。</desc>
+              <line x1="55" y1="340" x2="505" y2="340" stroke="#667085" stroke-width="2" />
+              <line x1="155" y1="385" x2="155" y2="45" stroke="#667085" stroke-width="2" />
+              <circle cx="155" cy="340" r="205" fill="#e5f5f2" fill-opacity=".65" stroke="#0f766e" stroke-width="4" />
+              <line x1="155" y1="340" x2="360" y2="340" stroke="#17202a" stroke-width="4" />
+              <line x1="155" y1="340" x2="346" y2="265" stroke="#3730a3" stroke-width="5" />
+              <line x1="346" y1="265" x2="346" y2="340" stroke="#be123c" stroke-width="4" />
+              <line x1="360" y1="340" x2="360" y2="259" stroke="#a94f08" stroke-width="4" />
+              <line x1="155" y1="340" x2="360" y2="259" stroke="#a94f08" stroke-width="4" stroke-dasharray="9 7" />
+              <path d="M207 340 A52 52 0 0 0 204 321" fill="none" stroke="#17202a" stroke-width="3" />
+              <text x="210" y="326" font-size="24">x</text>
+              <text x="245" y="304" font-size="20">半徑 1</text>
+              <text x="372" y="294" font-size="18">tan x</text>
+              <text x="300" y="255" font-size="18">sin x</text>
+              <text x="238" y="365" font-size="18">cos x</text>
+              <text x="155" y="412" text-anchor="middle" font-size="16">自製示意圖｜0 &lt; x &lt; π/2</text>
+            </svg>
+          </figure>
+          <article class="panel">
+            <h3>夾擠的核心</h3>
+            <p>在 \(0&lt;x&lt;\pi/2\) 且以弧度計時，面積關係為：</p>
+            <p>\[\frac12\sin x\cos x&lt;\frac12x&lt;\frac12\tan x\]</p>
+            <p>整理後：</p>
+            <p>\[\cos x&lt;\frac{\sin x}{x}&lt;\frac1{\cos x}\]</p>
+            <p>左右兩端在 \(x\to0\) 都趨近 1，所以：</p>
+            <p>\[\boxed{\lim_{x\to0}\frac{\sin x}{x}=1}\]</p>
+            <p>再用共軛：</p>
+            <p>\[\frac{1-\cos x}{x}=\frac{\sin x}{x}\cdot\frac{\sin x}{1+\cos x}\to1\cdot0=0\]</p>
+          </article>
+        </div>
+
+        <div class="grid" style="margin-top:20px">
+          <article class="panel">
+            <h3>推導 \((\sin x)'\)</h3>
+            <p>\[\begin{aligned}
+            \frac{d}{dx}\sin x
+            &=\lim_{h\to0}\frac{\sin(x+h)-\sin x}{h}\\
+            &=\lim_{h\to0}\left[\sin x\frac{\cos h-1}{h}+\cos x\frac{\sin h}{h}\right]\\
+            &=\sin x(0)+\cos x(1)=\boxed{\cos x}.
+            \end{aligned}\]</p>
+          </article>
+          <article class="panel">
+            <h3>推導 \((\cos x)'\)</h3>
+            <p>\[\begin{aligned}
+            \frac{d}{dx}\cos x
+            &=\lim_{h\to0}\frac{\cos(x+h)-\cos x}{h}\\
+            &=\lim_{h\to0}\left[\cos x\frac{\cos h-1}{h}-\sin x\frac{\sin h}{h}\right]\\
+            &=\cos x(0)-\sin x(1)=\boxed{-\sin x}.
+            \end{aligned}\]</p>
+          </article>
+        </div>
+
+        <div class="formula-grid" style="margin-top:20px">
+          <div class="formula-row"><strong>正弦</strong>\((\sin x)'=\cos x\)</div>
+          <div class="formula-row"><strong>餘弦</strong>\((\cos x)'=-\sin x\)</div>
+          <div class="formula-row"><strong>正切</strong>\((\tan x)'=\sec^2x\)</div>
+          <div class="formula-row"><strong>餘切</strong>\((\cot x)'=-\csc^2x\)</div>
+          <div class="formula-row"><strong>正割</strong>\((\sec x)'=\sec x\tan x\)</div>
+          <div class="formula-row"><strong>餘割</strong>\((\csc x)'=-\csc x\cot x\)</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="advanced">
+      <div class="container">
+        <p class="kicker">Comprehensive examples</p>
+        <h2>第 12 頁兩題完整拆解</h2>
+        <div class="grid">
+          <article class="panel">
+            <span class="tag hot">講義星號</span>
+            <h3>\(f(x)=\ln|\sec x+\tan x|\)</h3>
+            <div class="steps">
+              <div class="step">令 \(u=\sec x+\tan x\)，則 \((\ln|u|)'=u'/u\)。</div>
+              <div class="step">\(u'=\sec x\tan x+\sec^2x=\sec x(\tan x+\sec x)\)。</div>
+              <div class="step">與分母 \(\sec x+\tan x\) 約掉。</div>
+              <div class="step">\(\boxed{f'(x)=\sec x}\)，適用於原函數有定義的區間。</div>
+            </div>
+          </article>
+          <article class="panel">
+            <span class="tag hot">考試會考</span>
+            <h3>\(f(x)=(\tan x)^{\sin x}\)</h3>
+            <div class="steps">
+              <div class="step">在實數範圍先取 \(\tan x&gt;0\)，改寫 \(f=e^{\sin x\ln(\tan x)}\)。</div>
+              <div class="step">外層：\(f'=f\cdot\dfrac{d}{dx}[\sin x\ln(\tan x)]\)。</div>
+              <div class="step">內層乘法法則：\(\cos x\ln(\tan x)+\sin x\dfrac{\sec^2x}{\tan x}\)。</div>
+              <div class="step">因 \(\sin x\,\sec^2x/\tan x=\sec x\)，所以<br>\(\boxed{f'=(\tan x)^{\sin x}[\cos x\ln(\tan x)+\sec x]}\)。</div>
+            </div>
+          </article>
+        </div>
+        <div class="note conflict" style="margin-top:18px"><strong>實際知識查證：</strong>第二題的對數改寫在實數課程脈絡下通常假設 \(\tan x&gt;0\)。若底數為負，任意實數次方未必定義，不能直接套同一公式。</div>
+      </div>
+    </section>
+
+    <section id="mistakes">
+      <div class="container">
+        <p class="kicker">Common mistakes</p>
+        <h2>考場最常失分的 6 個位置</h2>
+        <div class="grid three">
+          <article class="panel"><h3>導數符號</h3><p>寫 \(f'(x)=\cdots\) 或 \(df/dx=\cdots\)，不要寫 \(f(x)=\) 導數。</p></article>
+          <article class="panel"><h3>連鎖漏層</h3><p>先圈最外層，再一層一層往內；每一層都要微分一次。</p></article>
+          <article class="panel"><h3>商法則符號</h3><p>固定順序「上微下不微 − 上不微下微」，分母是下平方。</p></article>
+          <article class="panel"><h3>三角負號</h3><p>\(\cos\)、\(\cot\)、\(\csc\) 的導數帶負號。</p></article>
+          <article class="panel"><h3>弧度制</h3><p>\(\lim_{x\to0}\sin x/x=1\) 與標準三角導數都以弧度為基礎。</p></article>
+          <article class="panel"><h3>過度化簡</h3><p>老師表示正確列式不必硬化到最簡；化簡錯誤反而可能失分。</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section id="practice">
+      <div class="container">
+        <p class="kicker">Flashcards</p>
+        <h2>公式翻卡</h2>
+        <p class="section-intro">點擊卡片或按 Enter／空白鍵翻面。先口答，再確認公式與條件。</p>
+        <div class="flash-grid" style="margin-top:20px">
+          <div class="flashcard" tabindex="0" role="button" aria-pressed="false"><div class="front"><span class="flash-label">問題</span>\((a^{u(x)})'=?\)</div><div class="back"><span class="flash-label">答案</span>\(a^u\ln(a)u'\)，\(a&gt;0\)。</div></div>
+          <div class="flashcard" tabindex="0" role="button" aria-pressed="false"><div class="front"><span class="flash-label">問題</span>\((\ln|u|)'=?\)</div><div class="back"><span class="flash-label">答案</span>\(u'/u\)，在 \(u\neq0\) 的區間。</div></div>
+          <div class="flashcard" tabindex="0" role="button" aria-pressed="false"><div class="front"><span class="flash-label">問題</span>三角導數中的三個負號？</div><div class="back"><span class="flash-label">答案</span>\(\cos\)、\(\cot\)、\(\csc\)。</div></div>
+          <div class="flashcard" tabindex="0" role="button" aria-pressed="false"><div class="front"><span class="flash-label">問題</span>\((\sec u)'=?\)</div><div class="back"><span class="flash-label">答案</span>\(\sec u\tan u\,u'\)。</div></div>
+          <div class="flashcard" tabindex="0" role="button" aria-pressed="false"><div class="front"><span class="flash-label">問題</span>\(\sin^{-1}x\) 是倒數嗎？</div><div class="back"><span class="flash-label">答案</span>不是；通常表示 \(\arcsin x\)。倒數應寫 \((\sin x)^{-1}=\csc x\)。</div></div>
+          <div class="flashcard" tabindex="0" role="button" aria-pressed="false"><div class="front"><span class="flash-label">問題</span>變底變次怎麼處理？</div><div class="back"><span class="flash-label">答案</span>對正底數 \(u^v=e^{v\ln u}\)，再用連鎖律與乘法法則。</div></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="quiz">
+      <div class="container">
+        <p class="kicker">Interactive quiz</p>
+        <h2>階段複習測驗｜20 題</h2>
+        <p class="section-intro">涵蓋公式判斷、定義域、教師提醒與綜合計算。交卷後會顯示每題正解與推論。</p>
+        <div class="quiz-toolbar">
+          <strong id="progressText">已作答 0 / 20</strong>
+          <div class="progress-track" aria-hidden="true"><div class="progress-bar" id="progressBar"></div></div>
+          <button class="button secondary" type="button" id="resetTop">重作</button>
+        </div>
+        <form id="quizForm">
+          <div class="quiz-list" id="quizList"></div>
+          <div class="hero-actions">
+            <button class="button" type="submit">交卷並看詳解</button>
+            <button class="button secondary" type="button" id="resetBottom">全部重作</button>
+          </div>
+        </form>
+        <div class="result" id="result" role="status" aria-live="polite"></div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p><strong>資料範圍：</strong>第四堂講義第 2–12 頁與三支完整課程影片。公開頁面僅含改寫筆記、自製圖與互動程式，不含原始 PDF、影片、逐字稿、姓名或本機路徑。</p>
+      <p><a href="index.html">返回課程首頁</a></p>
+    </div>
+  </footer>
+
+  <script>
+    const questions = [
+      { q: "1. 若 \\(f(x)=e^{g(x)}\\)，則 \\(f'(x)\\) 為何？", o: ["\\(e^{g(x)}\\)", "\\(e^{g(x)}g'(x)\\)", "\\(g(x)e^{g'(x)}\\)", "\\(e^xg'(x)\\)"], a: 1, e: "外層 \\(e^u\\) 微分後保留自己，再乘內層導數 \\(g'(x)\\)。" },
+      { q: "2. \\((a^x)'\\) 的正確公式為何？", o: ["\\(xa^{x-1}\\)", "\\(a^x\\)", "\\(a^x\\ln a\\)", "\\(\\ln(a^x)\\)"], a: 2, e: "把 \\(a^x\\) 寫成 \\(e^{x\\ln a}\\)，微分得到 \\(a^x\\ln a\\)。" },
+      { q: "3. 在 \\(x>0\\) 時，\\((x^x)'\\) 為何？", o: ["\\(x^{x-1}\\)", "\\(x^x\\ln x\\)", "\\(x^x(\\ln x+1)\\)", "\\(2x^x\\)"], a: 2, e: "先改寫 \\(x^x=e^{x\\ln x}\\)，而 \\((x\\ln x)'=\\ln x+1\\)。" },
+      { q: "4. \\((\\ln|u(x)|)'\\) 在 \\(u(x)\\neq0\\) 的區間等於？", o: ["\\(1/u\\)", "\\(u'/u\\)", "\\(u/u'\\)", "\\(|u'|/u\\)"], a: 1, e: "對數外層給 \\(1/u\\)，再乘內層導數 \\(u'\\)。" },
+      { q: "5. \\(\\lim_{x\\to0}\\sin x/x=1\\) 的標準結論需要角度採用？", o: ["度數", "弧度", "百分度", "任意單位都相同"], a: 1, e: "三角基本極限與標準導數公式以弧度制為基礎。" },
+      { q: "6. \\((\\cos x)'\\) 為何？", o: ["\\(\\sin x\\)", "\\(-\\sin x\\)", "\\(\\cos x\\)", "\\(-\\cos x\\)"], a: 1, e: "餘弦導數帶負號：\\((\\cos x)'=-\\sin x\\)。" },
+      { q: "7. \\((\\tan x)'\\) 為何？", o: ["\\(\\sec x\\)", "\\(\\sec^2x\\)", "\\(-\\csc^2x\\)", "\\(\\tan x\\sec x\\)"], a: 1, e: "由 \\(\\tan x=\\sin x/\\cos x\\) 套商法則，得到 \\(1/\\cos^2x=\\sec^2x\\)。" },
+      { q: "8. 下列哪個三角函數的導數不帶負號？", o: ["\\(\\cos x\\)", "\\(\\cot x\\)", "\\(\\csc x\\)", "\\(\\sec x\\)"], a: 3, e: "\\((\\sec x)'=\\sec x\\tan x\\)；其餘三者皆帶負號。" },
+      { q: "9. \\(\\sin^{-1}x\\) 在微積分常用記號中表示？", o: ["\\(1/\\sin x\\)", "\\(\\csc x\\)", "\\(\\arcsin x\\)", "\\(-\\sin x\\)"], a: 2, e: "\\(\\sin^{-1}x\\) 通常是反正弦；倒數應寫 \\((\\sin x)^{-1}=\\csc x\\)。" },
+      { q: "10. 商法則最容易漏掉哪一組？", o: ["加號與分子平方", "減號與分母平方", "乘號與分子平方", "絕對值與根號"], a: 1, e: "老師明確提醒：\\((u/v)'=(u'v-uv')/v^2\\)，常漏減號與分母平方。" },
+      { q: "11. 老師說本堂考試題主要採哪種形式？", o: ["完整推導證明", "講義空白與作業型計算", "只考定義背誦", "只考選擇題"], a: 1, e: "影片 4.2 明確說明：推導重理解，考題以講義空白處與作業型計算為主。" },
+      { q: "12. 下列哪個作答開頭在數學上正確？", o: ["\\(f(x)=\\) 導數答案", "\\(f'(x)=\\) 導數答案", "\\(x=\\) 導數答案", "原式抄一次後直接等於答案"], a: 1, e: "應用 \\(f'(x)\\) 或 \\(df/dx\\) 表示導數；老師提醒錯誤符號可能被扣分。" },
+      { q: "13. \\(f(x)=e^x/(x^2+3)\\)，則 \\(f'(x)\\) 為何？", o: ["\\(e^x/(2x)\\)", "\\(e^x(x^2-2x+3)/(x^2+3)^2\\)", "\\(e^x(x^2+2x+3)/(x^2+3)\\)", "\\((e^x-2x)/(x^2+3)^2\\)"], a: 1, e: "商法則分子為 \\(e^x(x^2+3)-e^x(2x)=e^x(x^2-2x+3)\\)。" },
+      { q: "14. \\(f(x)=10^{x^2}\\)，則 \\(f'(x)\\) 為何？", o: ["\\(2x10^{x^2}\\ln10\\)", "\\(10^{2x}\\)", "\\(x^2 10^{x^2-1}\\)", "\\(2x e^{x^2}\\)"], a: 0, e: "一般底數公式給 \\(10^{x^2}\\ln10\\)，再乘內層導數 \\(2x\\)。" },
+      { q: "15. \\(f(x)=\\log_3(x^2-1)\\)，則 \\(f'(x)\\) 為何？", o: ["\\(2x/(x^2-1)\\)", "\\(1/[(x^2-1)\\ln3]\\)", "\\(2x/[(x^2-1)\\ln3]\\)", "\\(\\ln3/(2x)\\)"], a: 2, e: "\\((\\log_a u)'=u'/(u\\ln a)\\)，此處 \\(u'=2x\\)。" },
+      { q: "16. \\(f(x)=1/\\ln x\\)，則 \\(f'(x)\\) 為何？", o: ["\\(1/(x\\ln x)\\)", "\\(-1/[x(\\ln x)^2]\\)", "\\(-1/(\\ln x)^2\\)", "\\(x/\\ln x\\)"], a: 1, e: "寫成 \\((\\ln x)^{-1}\\)：外層給 \\(-\\ln^{-2}x\\)，內層給 \\(1/x\\)。" },
+      { q: "17. \\(f(x)=\\sec(x^3)\\)，則 \\(f'(x)\\) 為何？", o: ["\\(3x^2\\sec(x^3)\\tan(x^3)\\)", "\\(\\sec^2(x^3)\\)", "\\(3x^2\\sec^2x\\)", "\\(x^3\\sec x\\tan x\\)"], a: 0, e: "先微 \\(\\sec u\\) 得 \\(\\sec u\\tan u\\)，再乘 \\((x^3)'=3x^2\\)。" },
+      { q: "18. \\(f(x)=\\csc^3(1/x)\\)，則 \\(f'(x)\\) 為何？", o: ["\\(-3\\csc^2(1/x)\\)", "\\(3\\csc^3(1/x)\\cot(1/x)/x^2\\)", "\\(-3x^2\\csc(1/x)\\cot(1/x)\\)", "\\(3\\csc^2x\\cot x\\)"], a: 1, e: "立方、中層 \\(\\csc\\)、內層 \\(1/x\\) 共三層；中層與內層各有一個負號，最後相消。" },
+      { q: "19. \\(f(x)=\\ln|\\sec x+\\tan x|\\)，則 \\(f'(x)\\) 化簡後為何？", o: ["\\(\\tan x\\)", "\\(\\sec x\\)", "\\(\\sec^2x\\)", "\\(\\csc x\\)"], a: 1, e: "分子可提出 \\(\\sec x(\\tan x+\\sec x)\\)，與分母相消，留下 \\(\\sec x\\)。" },
+      { q: "20. 在 \\(\\tan x>0\\) 時，\\(f(x)=(\\tan x)^{\\sin x}\\) 的導數為何？", o: ["\\((\\tan x)^{\\sin x}\\cos x\\)", "\\((\\tan x)^{\\sin x}[\\cos x\\ln(\\tan x)+\\sec x]\\)", "\\(\\sin x(\\tan x)^{\\sin x-1}\\sec^2x\\)", "\\(e^{\\sin x}\\sec^2x\\)"], a: 1, e: "先寫成 \\(e^{\\sin x\\ln(\\tan x)}\\)，內層乘法微分後第二項可化為 \\(\\sec x\\)。" }
+    ];
+
+    const list = document.getElementById("quizList");
+    const form = document.getElementById("quizForm");
+    const progressText = document.getElementById("progressText");
+    const progressBar = document.getElementById("progressBar");
+    const result = document.getElementById("result");
+
+    function renderQuiz() {
+      list.innerHTML = questions.map((item, index) => `
+        <article class="quiz-card" data-question="${index}">
+          <p class="question-title">${item.q}</p>
+          <div class="options">
+            ${item.o.map((option, optionIndex) => `
+              <label class="option">
+                <input type="radio" name="q${index}" value="${optionIndex}" />
+                <span>${String.fromCharCode(65 + optionIndex)}. ${option}</span>
+              </label>
+            `).join("")}
+          </div>
+          <div class="explanation"><strong>正解：${String.fromCharCode(65 + item.a)}</strong><br>${item.e}</div>
+        </article>
+      `).join("");
+      if (window.MathJax?.typesetPromise) window.MathJax.typesetPromise([list]);
+      updateProgress();
+    }
+
+    function updateProgress() {
+      const answered = questions.filter((_, index) => form.querySelector(`input[name="q${index}"]:checked`)).length;
+      progressText.textContent = `已作答 ${answered} / ${questions.length}`;
+      progressBar.style.width = `${answered / questions.length * 100}%`;
+    }
+
+    function resetQuiz() {
+      form.reset();
+      document.querySelectorAll(".quiz-card").forEach(card => card.classList.remove("graded", "correct", "wrong"));
+      result.classList.remove("show");
+      result.textContent = "";
+      updateProgress();
+      document.getElementById("quiz").scrollIntoView({ behavior: "smooth" });
+    }
+
+    form.addEventListener("change", updateProgress);
+    form.addEventListener("submit", event => {
+      event.preventDefault();
+      let score = 0;
+      questions.forEach((item, index) => {
+        const card = document.querySelector(`[data-question="${index}"]`);
+        const selected = form.querySelector(`input[name="q${index}"]:checked`);
+        card.classList.add("graded");
+        card.classList.remove("correct", "wrong");
+        if (selected && Number(selected.value) === item.a) {
+          score += 1;
+          card.classList.add("correct");
+        } else {
+          card.classList.add("wrong");
+        }
+      });
+      const unanswered = questions.filter((_, index) => !form.querySelector(`input[name="q${index}"]:checked`)).length;
+      result.innerHTML = `得分 ${score} / ${questions.length}（${Math.round(score / questions.length * 100)}%）${unanswered ? `，尚有 ${unanswered} 題未作答。` : "。"}<br><span style="font-size:15px;font-weight:700">請向下逐題查看正解與推論；錯題優先回看對應公式與連鎖層次。</span>`;
+      result.classList.add("show");
+      result.scrollIntoView({ behavior: "smooth", block: "center" });
+    });
+
+    document.getElementById("resetTop").addEventListener("click", resetQuiz);
+    document.getElementById("resetBottom").addEventListener("click", resetQuiz);
+
+    document.querySelectorAll(".flashcard").forEach(card => {
+      const flip = () => {
+        const active = card.classList.toggle("flipped");
+        card.setAttribute("aria-pressed", String(active));
+      };
+      card.addEventListener("click", flip);
+      card.addEventListener("keydown", event => {
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault();
+          flip();
+        }
+      });
+    });
+
+    renderQuiz();
+  </script>
+</body>
+</html>
